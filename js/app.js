@@ -957,7 +957,7 @@
         [/简谐|胡克|弹簧频率|阻尼/, "弹簧振子"],
         [/单摆/, "单摆"],
         [/抛体/, "抛体小球"],
-        [/行星|开普勒|黄金代换/, "行星轨道"],
+        [/行星|开普勒|黄金代换|万有引力|重力/, "引力系统"],
         [/PMA|粒子/, "粒子对"],
         [/向心|转动|角动量|刚体/, "转动系统"],
         [/欧姆|电功率|RC|变压器|电容|电阻/, "电路元件"],
@@ -975,28 +975,185 @@
       const hit = rules.find(([pattern]) => pattern.test(n));
       return law.object || (hit ? hit[1] : (law.category || "物理系统"));
     }
+    function legendMeta(law){
+      return (law.legend || []).map(item => {
+        const [rawSymbol, ...rest] = item.split("：");
+        return {
+          symbol: rawSymbol.trim(),
+          desc: rest.join("：").trim() || item
+        };
+      });
+    }
+    function axisOverrideOf(law){
+      const map = {
+        "简谐振动": ["t（时间）", "x（位移）"],
+        "阻尼运动": ["t（时间）", "x（位移）"],
+        "抛体运动": ["x（水平位移）", "y（竖直位移）"],
+        "单摆小角度": ["L（摆长）", "T（周期）"],
+        "行星轨道": ["r³（轨道半径三次方）", "T²（公转周期平方）"],
+        "反平方定律": ["1/r²（距离平方倒数）", "F（作用强度）"],
+        "放射性衰变": ["t（时间）", "N（剩余数量）"],
+        "相对论动能": ["β = v/c（速度与光速之比）", "Eₖ / mc²（归一化动能）"],
+        "弹簧频率": ["1/m（质量倒数）", "ω²（角频率平方）"],
+        "共振峰": ["ω（驱动角频率）", "A（振幅）"],
+        "等熵气体": ["V^(-γ)（体积负γ次方）", "P（压强）"],
+        "霍尔效应": ["IB（电流与磁场乘积）", "VH（霍尔电压）"],
+        "等离子频率": ["n（带电粒子密度）", "ωp²（等离子体频率平方）"],
+        "匀速直线运动": ["t（时间）", "s（路程）"],
+        "加速度定义": ["t（时间）", "Δv（速度变化量）"],
+        "匀变速速度公式": ["t（时间）", "v（瞬时速度）"],
+        "匀变速位移公式": ["t（时间）", "s（位移）"],
+        "速度位移关系": ["s（位移）", "v² - v₀²（速度平方差）"],
+        "平抛合速度": ["vᵧ²（竖直速度平方）", "v²（合速度平方）"],
+        "牛顿第二定律": ["a（加速度）", "F（合力）"],
+        "牛顿第三定律": ["F_AB（作用力）", "-F_BA（反作用力）"],
+        "重力与质量": ["m（质量）", "G（重力）"],
+        "滑动摩擦力": ["N（正压力）", "f（滑动摩擦力）"],
+        "万有引力定律": ["m₁m₂/r²（质量乘积除以距离平方）", "F（引力）"],
+        "黄金代换": ["R²（地球半径平方）", "GM（引力参数）"],
+        "环绕速度": ["1/r（轨道半径倒数）", "v²（环绕速度平方）"],
+        "开普勒第三定律": ["a³（半长轴三次方）", "T²（周期平方）"],
+        "恒力做功": ["s（位移）", "W（功）"],
+        "功率定义": ["t（时间）", "W（做功量）"],
+        "机械能守恒": ["Eₚ（势能）", "Eₖ（动能）"],
+        "动量定义": ["v（速度）", "p（动量）"],
+        "动量定理": ["Δt（作用时间）", "Δp（动量变化）"],
+        "动量守恒": ["p_before（碰前总动量）", "p_after（碰后总动量）"],
+        "比热容吸热": ["ΔT（温度变化）", "Q（吸收热量）"],
+        "相变潜热": ["m（质量）", "Q（潜热）"],
+        "理想气体状态方程": ["T（绝对温度）", "pV（压强体积乘积）"],
+        "热力学第一定律": ["Q + W（热量与功输入）", "ΔU（内能变化）"],
+        "热力学第二定律": ["过程推进", "ΔS_universe（宇宙总熵变）"],
+        "热力学零定律": ["热接触关系", "温度等价关系"],
+        "线膨胀": ["ΔT（温度变化）", "ΔL（长度变化）"],
+        "热力学基本方程": ["TdS - pdV（热功微分组合）", "dU（内能微分）"],
+        "热力学势": ["状态变量组合", "F / G / H（热力学势）"],
+        "麦克斯韦关系": ["热力学偏导路径", "偏导对称关系"],
+        "玻尔兹曼熵": ["lnΩ（微观状态数对数）", "S（熵）"],
+        "正则配分函数": ["βE（无量纲能量）", "e^{-βE}（统计权重）"],
+        "玻色-爱因斯坦分布": ["ε - μ（能级相对化学势）", "⟨n⟩（平均占有数）"],
+        "费米-狄拉克分布": ["ε - μ（能级相对化学势）", "⟨n⟩（平均占有数）"],
+        "普朗克黑体辐射": ["ν（频率）", "I(ν,T)（谱辐射强度）"],
+        "电场强度定义": ["q（试探电荷）", "F（电场力）"],
+        "电势差定义": ["q（电荷量）", "W_AB（电场力做功）"],
+        "匀强电场电势差": ["d（两点距离）", "U（电势差）"],
+        "电容定义": ["U（电压）", "Q（电荷量）"],
+        "电阻定律": ["L/S（长度面积比）", "R（电阻）"],
+        "基尔霍夫定律": ["电路节点/回路", "电流与电压约束"],
+        "安培力": ["I（电流）", "F（安培力）"],
+        "带电粒子回旋半径": ["v（速度）", "r（回旋半径）"],
+        "动生电动势": ["v（切割速度）", "ε（感应电动势）"],
+        "正弦交流电": ["t（时间）", "u（瞬时电压）"],
+        "高斯电场定律": ["ρ（电荷密度）", "∇·E（电场散度）"],
+        "高斯磁场定律": ["空间位置", "∇·B（磁场散度）"],
+        "法拉第感应定律": ["∂B/∂t（磁场变化率）", "∇×E（感生电场旋度）"],
+        "安培-麦克斯韦定律": ["J + ε₀∂E/∂t（总源项）", "∇×B（磁场旋度）"],
+        "电磁波速度": ["μ₀ε₀（真空电磁常数乘积）", "c（电磁波速度）"],
+        "全反射临界角": ["n₂/n₁（折射率比）", "sinC（临界角正弦）"],
+        "薄透镜成像": ["1/u（物距倒数）", "1/v（像距倒数）"],
+        "双缝干涉条纹": ["L/d（屏距缝距比）", "Δy（条纹间距）"],
+        "光栅方程": ["sinθ（衍射角正弦）", "kλ/d（级次波长比）"],
+        "马吕斯定律": ["cos²θ（偏振夹角余弦平方）", "I（透射光强）"],
+        "质能等价": ["m（质量）", "E（能量）"],
+        "时间膨胀": ["β = v/c（速度与光速之比）", "γ（时间膨胀因子）"],
+        "长度收缩": ["γ（洛伦兹因子）", "L（运动方向长度）"],
+        "光电效应方程": ["ν（光频率）", "Eₖ（光电子最大动能）"],
+        "海森堡不确定性": ["Δx（位置不确定度）", "Δp（动量不确定度）"],
+        "氢原子能级": ["1/n²（主量子数平方倒数）", "Eₙ（能级能量）"],
+        "能级跃迁光子": ["Eₙ - Eₘ（能级差）", "hν（光子能量）"],
+        "拉格朗日方程": ["qᵢ（广义坐标）", "d/dt(∂L/∂q̇ᵢ) - ∂L/∂qᵢ（方程残差）"],
+        "哈密顿正则方程": ["qᵢ（广义坐标）", "pᵢ（广义动量）"],
+        "最小作用量原理": ["轨迹偏离量", "S（作用量）"],
+        "诺特定理": ["连续对称性强度", "守恒量稳定度"],
+        "正则对易关系": ["测量尺度", "[x̂,p̂]（对易量）"],
+        "动量算符": ["k（空间相位梯度）", "p（动量）"],
+        "泡利矩阵": ["测量角度", "自旋投影"],
+        "全同粒子对称性": ["交换操作", "波函数符号"],
+        "布洛赫定理": ["k（晶体动量）", "ψₖ（周期势波函数相位）"],
+        "有效质量": ["k（波矢）", "E（能带能量）"],
+        "QED拉格朗日量": ["耦合强度", "相互作用项强度"],
+        "狄拉克方程": ["p（动量）", "E（相对论能量）"],
+        "路径积分生成泛函": ["S（作用量）", "e^{iS}（相位权重）"],
+        "标准模型规范群": ["相互作用尺度", "规范结构响应"],
+        "爱因斯坦场方程": ["T_μν（能量动量张量）", "G_μν（时空曲率）"],
+        "测地线方程": ["τ（固有时）", "x^μ（自由粒子轨迹）"],
+        "弗里德曼方程": ["ρ（宇宙能量密度）", "(ȧ/a)²（膨胀率平方）"],
+        "Polyakov作用量": ["σ（世界面坐标）", "X^μ（弦嵌入坐标）"],
+        "AdS/CFT对偶": ["边界场论观测量", "体时空引力观测量"],
+        "圈量子引力自旋网络": ["j（自旋标记）", "A / V（几何谱）"]
+      };
+      const hit = map[law.name];
+      return hit ? {x:hit[0], y:hit[1]} : null;
+    }
+    function axisLabelFromText(law, text, fallback){
+      const clean = String(text || "").replace(/平方/g, "²").replace(/三次方/g, "³").replace(/四次方/g, "⁴");
+      const entries = legendMeta(law).sort((a, b) => b.symbol.length - a.symbol.length);
+      const direct = entries.find(({symbol, desc}) => clean.includes(symbol) || desc.includes(text) || text.includes(desc) || clean.includes(desc.replace(/平方/g, "²")));
+      if(direct) return `${direct.symbol}（${direct.desc}）`;
+      const symbolRules = [
+        [/时间|t/, "t（时间）"],
+        [/频率|f/, "f（频率）"],
+        [/波长|λ/, "λ（波长）"],
+        [/速度平方|v²/, "v²（速度平方）"],
+        [/速度|v/, "v（速度）"],
+        [/角加速度|α/, "α（角加速度）"],
+        [/力矩|τ|M/, "τ（力矩）"],
+        [/角速度|ω/, "ω（角速度）"],
+        [/角动量|L/, "L（角动量）"],
+        [/位移|路程|距离|s/, "s（位移/路程）"],
+        [/高度|h/, "h（高度）"],
+        [/质量|m/, "m（质量）"],
+        [/力|F/, "F（力）"],
+        [/电流|I/, "I（电流）"],
+        [/电压|电势差|V|U/, "V / U（电压）"],
+        [/压强|压力|P/, "P（压强）"],
+        [/温度|T/, "T（温度）"],
+        [/能量|动能|势能|E|U/, "E / U（能量）"],
+        [/半径倒数|距离倒数|1\/r/, "1/r（半径或距离倒数）"],
+        [/距离平方倒数|1\/r²/, "1/r²（距离平方倒数）"],
+        [/半径|r/, "r（半径）"]
+      ];
+      const rule = symbolRules.find(([pattern]) => pattern.test(clean));
+      return rule ? rule[1] : fallback;
+    }
+    function axisInfoOf(law){
+      const override = axisOverrideOf(law);
+      if(override) return override;
+      const sub = law.sub || "";
+      if(sub.includes("→")){
+        const [left, right] = sub.split("→").map(s => s.trim());
+        return {
+          x: axisLabelFromText(law, left, `横轴变量（${left || "输入"}）`),
+          y: axisLabelFromText(law, right, `纵轴变量（${right || "输出"}）`)
+        };
+      }
+      if(sub.includes("倒数")){
+        return {x: axisLabelFromText(law, sub, "横轴变量"), y: "观测量"};
+      }
+      return {x:"横轴变量", y:"纵轴观测量"};
+    }
     function dynamicRelationText(law, metrics, data){
+      const axis = axisInfoOf(law);
       const xs = data.map(p => p.x), ys = data.map(p => p.y);
-      const dy = ys[ys.length - 1] - ys[0];
-      const trend = Math.abs(dy) < Math.max(.03, Math.abs(Math.max(...ys) - Math.min(...ys)) * .08) ? "保持近似约束或周期结构" : (dy > 0 ? "随横轴变量增大而增大" : "随横轴变量增大而减小");
+      const slope = linearFit(data).m;
+      const yRange = Math.abs(Math.max(...ys) - Math.min(...ys));
+      const trend = Math.abs(slope) < Math.max(.01, yRange * .015) ? "保持近似约束或周期结构" : (slope > 0 ? `随 ${axis.x} 增大而增大` : `随 ${axis.x} 增大而减小`);
       const keyMetric = metrics.find(([key]) => /估计|斜率|系数|周期|半衰期|比值|曲率|耦合/.test(key)) || metrics[0];
       const metricPart = keyMetric ? `；${keyMetric[0]} = ${keyMetric[1]}` : "";
       const condition = `参数强度 ${labState.yScale.toFixed(2)}x，横轴尺度 ${labState.xScale.toFixed(2)}x，噪声 ${labState.noise.toFixed(3)}`;
-      return `当前图中，观测量${trend}${metricPart}；条件：${condition}。函数曲线仅用于证明变量关系。`;
+      return `当前图中，${axis.y}${trend}${metricPart}；条件：${condition}。函数曲线仅用于证明变量关系。`;
     }
     function dynamicLegendHTML(law, metrics, data){
+      const axis = axisInfoOf(law);
       const xs = data.map(p => p.x), ys = data.map(p => p.y);
       const metricText = metrics.map(([key, value]) => `${key} ${value}`);
-      const spans = law.legend.map(item => {
-        const [rawSymbol, ...rest] = item.split("：");
-        const symbol = rawSymbol.trim();
-        const desc = rest.join("：").trim() || item;
+      const spans = legendMeta(law).map(({symbol, desc}) => {
         const hit = metricText.find(text => text.includes(symbol) || text.includes(desc.slice(0, 2)));
         const estimate = hit ? `<em>本轮估计：${esc(hit)}</em>` : "";
         return `<span><b>${esc(symbol)}</b><small>${esc(desc)}</small>${estimate}</span>`;
       });
       spans.unshift(`<span class="law-identity"><b>${esc(physicalObjectOf(law))}</b><small>${esc(law.formula)}</small><em>${esc(dynamicRelationText(law, metrics, data))}</em></span>`);
-      spans.unshift(`<span class="scope"><b>数据窗口</b><small>x: ${fmt(Math.min(...xs))} ~ ${fmt(Math.max(...xs))} · y: ${fmt(Math.min(...ys))} ~ ${fmt(Math.max(...ys))}</small><em>参数强度 ${labState.yScale.toFixed(2)}x · 横轴尺度 ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`);
+      spans.unshift(`<span class="scope"><b>数据窗口</b><small>横轴 ${esc(axis.x)}：${fmt(Math.min(...xs))} ~ ${fmt(Math.max(...xs))}</small><small>纵轴 ${esc(axis.y)}：${fmt(Math.min(...ys))} ~ ${fmt(Math.max(...ys))}</small><em>参数强度 ${labState.yScale.toFixed(2)}x · 横轴尺度 ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`);
       return spans.join("");
     }
     function syncLawControls(){
