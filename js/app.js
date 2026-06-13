@@ -951,6 +951,39 @@
         y: point.y * labState.yScale + noise(labState.noise)
       }));
     }
+    function physicalObjectOf(law){
+      const n = law.name;
+      const rules = [
+        [/简谐|胡克|弹簧频率|阻尼/, "弹簧振子"],
+        [/单摆/, "单摆"],
+        [/抛体/, "抛体小球"],
+        [/行星|开普勒|黄金代换/, "行星轨道"],
+        [/PMA|粒子/, "粒子对"],
+        [/向心|转动|角动量|刚体/, "转动系统"],
+        [/欧姆|电功率|RC|变压器|电容|电阻/, "电路元件"],
+        [/库仑|点电荷|电场|洛伦兹|霍尔|法拉第|磁|麦克斯韦|电磁/, "电荷与电磁场"],
+        [/理想气体|热传导|冷却|热|斯特藩|维恩|黑体|熵|配分|费米-狄拉克|玻色-爱因斯坦/, "热系统"],
+        [/流体|伯努利|泊肃叶|斯托克斯|毛细|终端速度|扩散|阻力|液体|阿基米德/, "流体介质"],
+        [/波速|多普勒|弦振动|共振/, "波动介质"],
+        [/斯涅尔|马吕斯|透镜|干涉|光栅|光学/, "光学系统"],
+        [/布拉格|布洛赫|有效质量|德拜|费米能|固体/, "晶体材料"],
+        [/光电|德布罗意|氢原子|能级|薛定谔|对易|泡利|全同|费米黄金/, "量子系统"],
+        [/相对论|时间膨胀|长度收缩|爱因斯坦|测地线|史瓦西|弗里德曼/, "时空几何"],
+        [/QED|狄拉克|路径积分|标准模型|希格斯/, "量子场"],
+        [/Polyakov|AdS|圈量子|弦论|量子引力/, "量子引力模型"]
+      ];
+      const hit = rules.find(([pattern]) => pattern.test(n));
+      return law.object || (hit ? hit[1] : (law.category || "物理系统"));
+    }
+    function dynamicRelationText(law, metrics, data){
+      const xs = data.map(p => p.x), ys = data.map(p => p.y);
+      const dy = ys[ys.length - 1] - ys[0];
+      const trend = Math.abs(dy) < Math.max(.03, Math.abs(Math.max(...ys) - Math.min(...ys)) * .08) ? "保持近似约束或周期结构" : (dy > 0 ? "随横轴变量增大而增大" : "随横轴变量增大而减小");
+      const keyMetric = metrics.find(([key]) => /估计|斜率|系数|周期|半衰期|比值|曲率|耦合/.test(key)) || metrics[0];
+      const metricPart = keyMetric ? `；${keyMetric[0]} = ${keyMetric[1]}` : "";
+      const condition = `参数强度 ${labState.yScale.toFixed(2)}x，横轴尺度 ${labState.xScale.toFixed(2)}x，噪声 ${labState.noise.toFixed(3)}`;
+      return `当前图中，观测量${trend}${metricPart}；条件：${condition}。函数曲线仅用于证明变量关系。`;
+    }
     function dynamicLegendHTML(law, metrics, data){
       const xs = data.map(p => p.x), ys = data.map(p => p.y);
       const metricText = metrics.map(([key, value]) => `${key} ${value}`);
@@ -962,6 +995,7 @@
         const estimate = hit ? `<em>本轮估计：${esc(hit)}</em>` : "";
         return `<span><b>${esc(symbol)}</b><small>${esc(desc)}</small>${estimate}</span>`;
       });
+      spans.unshift(`<span class="law-identity"><b>${esc(physicalObjectOf(law))}</b><small>${esc(law.formula)}</small><em>${esc(dynamicRelationText(law, metrics, data))}</em></span>`);
       spans.unshift(`<span class="scope"><b>数据窗口</b><small>x: ${fmt(Math.min(...xs))} ~ ${fmt(Math.max(...xs))} · y: ${fmt(Math.min(...ys))} ~ ${fmt(Math.max(...ys))}</small><em>参数强度 ${labState.yScale.toFixed(2)}x · 横轴尺度 ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`);
       return spans.join("");
     }

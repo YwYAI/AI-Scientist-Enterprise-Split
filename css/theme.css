@@ -780,6 +780,22 @@ p{margin:0}
   background:rgba(255,193,7,.06);
 }
 .formula-legend.dynamic .scope b{color:var(--amber)}
+.formula-legend.dynamic .law-identity{
+  border-color:rgba(0,229,255,.42);
+  background:linear-gradient(180deg,rgba(0,229,255,.12),rgba(255,255,255,.04));
+}
+.formula-legend.dynamic .law-identity b{
+  color:#fff;
+  font-size:14px;
+}
+.formula-legend.dynamic .law-identity small{
+  color:var(--cyan);
+  font:800 13px Consolas,"SFMono-Regular",monospace;
+}
+.formula-legend.dynamic .law-identity em{
+  color:var(--muted);
+  line-height:1.45;
+}
 .law-controls{
   display:grid;
   gap:9px;
