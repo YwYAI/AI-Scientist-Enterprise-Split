@@ -64,6 +64,20 @@
     sections[index].scrollIntoView({behavior});
     setCurrent(index);
   }
+  let aiAbilityStep = 0;
+  function aiAbilityCards(){
+    const section = $("#s4");
+    return section ? $$(".ai-ability-card", section) : [];
+  }
+  function setAiAbilityStep(step){
+    const cards = aiAbilityCards();
+    if(!cards.length) return;
+    aiAbilityStep = Math.max(0, Math.min(cards.length, step));
+    cards.forEach((card, i) => {
+      card.classList.toggle("revealed", i < aiAbilityStep);
+      card.classList.toggle("active", i === aiAbilityStep - 1);
+    });
+  }
   navList.addEventListener("click", e => {
     const link = e.target.closest("a");
     if(!link) return;
@@ -102,6 +116,11 @@
   setSidebarOpen(true);
   document.addEventListener("keydown", e => {
     const key = e.key.toLowerCase();
+    if(isActiveSection("s4") && (e.key === "ArrowRight" || e.key === "ArrowLeft")){
+      e.preventDefault();
+      setAiAbilityStep(aiAbilityStep + (e.key === "ArrowRight" ? 1 : -1));
+      return;
+    }
     if(e.key === "ArrowDown"){
       e.preventDefault();
       go(current + 1);
@@ -121,6 +140,15 @@
       e.preventDefault();
       document.activeElement.click();
     }
+    if((e.key === "Enter" || e.key === " ") && document.activeElement?.classList.contains("ai-ability-card")){
+      e.preventDefault();
+      const step = Number(document.activeElement.dataset.abilityStep || 0);
+      setAiAbilityStep(step + 1);
+    }
+    if((e.key === "Enter" || e.key === " ") && document.activeElement?.classList.contains("ai-compare-guide")){
+      e.preventDefault();
+      setAiAbilityStep(aiAbilityStep + 1);
+    }
   });
 
   document.addEventListener("click", e => {
@@ -132,6 +160,17 @@
         go(targetIndex);
         setCurrent(targetIndex);
       }
+      return;
+    }
+    const guide = e.target.closest(".ai-compare-guide");
+    if(guide){
+      setAiAbilityStep(aiAbilityStep + 1);
+      return;
+    }
+    const abilityCard = e.target.closest(".ai-ability-card");
+    if(abilityCard){
+      const step = Number(abilityCard.dataset.abilityStep || 0);
+      setAiAbilityStep(step + 1);
       return;
     }
     const towerWindow = e.target.closest(".tower-window");

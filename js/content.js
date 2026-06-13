@@ -105,11 +105,12 @@ window.AI_SCIENTIST_CONTENT = [
         <div class="panel"><h3>科学家</h3><p class="lead">少量数据中形成直觉，提出高价值问题，进行概念抽象，并判断理论是否有意义。</p><div class="meter"><i></i></div></div>
         <div class="panel"><h3>AI</h3><p class="lead">处理海量数据，搜索复杂组合，运行大规模模拟，发现高维空间中的隐藏模式。</p><div class="meter"><i style="animation-delay:1s"></i></div></div>
       </div>
-      <div class="grid four" style="margin-top:24px">
-        <div class="card pulse"><h3>观察能力</h3><p class="muted">从仪器和工业系统接收海量信号。</p></div>
-        <div class="card pulse"><h3>推理能力</h3><p class="muted">在假设空间中快速排除错误路径。</p></div>
-        <div class="card pulse"><h3>抽象能力</h3><p class="muted">把复杂数据压缩成可解释结构。</p></div>
-        <div class="card pulse"><h3>预测能力</h3><p class="muted">在实验前预演未来状态。</p></div>
+      <div class="ai-compare-guide" role="button" tabindex="0" aria-label="点击卡片或按左右键展开能力说明"><span>点击卡片</span><b>或按 ← →</b><em>展开能力说明</em></div>
+      <div class="grid four ai-ability-grid" style="margin-top:16px">
+        <div class="card pulse ai-ability-card" data-ability-step="0" tabindex="0"><h3>观察能力</h3><p class="muted">从仪器和工业系统接收海量信号。</p></div>
+        <div class="card pulse ai-ability-card" data-ability-step="1" tabindex="0"><h3>推理能力</h3><p class="muted">在假设空间中快速排除错误路径。</p></div>
+        <div class="card pulse ai-ability-card" data-ability-step="2" tabindex="0"><h3>抽象能力</h3><p class="muted">把复杂数据压缩成可解释结构。</p></div>
+        <div class="card pulse ai-ability-card" data-ability-step="3" tabindex="0"><h3>预测能力</h3><p class="muted">在实验前预演未来状态。</p></div>
       </div>
     </section>`
   },
