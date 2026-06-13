@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI如何像物理学家一样发现物理规律</title>
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+  <canvas id="spaceCanvas" aria-hidden="true"></canvas>
+  <div class="ambient" aria-hidden="true"></div>
+
+  <nav id="sideNav" class="side-nav" aria-label="章节导航">
+    <div class="nav-top">
+      <div class="brand">
+        <span>AI Scientist</span>
+        <strong>从数据到规律</strong>
+      </div>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="关闭目录边栏" aria-controls="sideNav" aria-expanded="true">×</button>
+    </div>
+    <div class="progress-track"><div id="progressBar"></div></div>
+    <div id="navList" class="nav-list"></div>
+    <a id="versionBadge" class="version-badge" href="version-history.html" target="_blank" rel="noopener">AI Scientist v2.70 迭代记录</a>
+  </nav>
+  <button id="sidebarToggle" class="sidebar-toggle-fab" type="button" aria-label="打开目录边栏" aria-controls="sideNav" aria-expanded="false">☰</button>
+
+  <main id="deck" class="deck"></main>
+
+  <aside id="notesPanel" class="notes-panel" aria-live="polite">
+    <h2>Presenter Notes</h2>
+    <div id="notesContent"></div>
+  </aside>
+
+  <div class="control-hint">F 全屏 · P 演讲模式 · N 备注 · M 边栏 · ← → 翻页 · 鼠标互动</div>
+
+  <script src="js/content.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

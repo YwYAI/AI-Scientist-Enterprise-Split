@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Scientist 版本迭代记录</title>
+  <style>
+    :root{--bg:#050816;--cyan:#00E5FF;--green:#4CAF50;--amber:#FFC107;--muted:#B0BEC5;--line:rgba(0,229,255,.22)}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(circle at 30% 0,rgba(0,229,255,.16),transparent 34%),var(--bg);color:#fff;font-family:"Microsoft YaHei",Arial,sans-serif}
+    main{max-width:1180px;margin:0 auto;padding:56px 28px 72px}
+    a{color:var(--cyan);text-decoration:none}
+    h1{font-size:42px;margin:0 0 12px}
+    .lead{color:var(--muted);font-size:18px;line-height:1.7;margin-bottom:28px}
+    .version{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--line)}
+    .version b{color:var(--amber);font-size:20px}
+    .version h2{margin:0 0 8px;font-size:23px}
+    .version p{margin:0;color:var(--muted);line-height:1.65}
+    .back{display:inline-block;margin-top:30px;border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:rgba(0,229,255,.08);font-weight:900}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>AI Scientist v2.70 迭代记录</h1>
+    <p class="lead">本轮自主进化累计形成 50 种物理规律发现能力。每一项都采用“生成带噪声观测数据 → 拟合或估计参数 → 输出可解释规律”的结构，并保持原有数据拟合、绘图和章节导航功能不变。</p>
+    <section class="version"><b>v2.01</b><div><h2>简谐振动发现</h2><p>新增周期轨迹识别，估计周期与角频率，发现 x = A cos(ωt + φ)。</p></div></section>
+    <section class="version"><b>v2.02</b><div><h2>阻尼运动发现</h2><p>新增衰减振荡识别，区分理想振动和能量耗散系统。</p></div></section>
+    <section class="version"><b>v2.03</b><div><h2>抛体运动发现</h2><p>新增二次轨迹拟合，从飞行轨迹发现恒定重力加速度。</p></div></section>
+    <section class="version"><b>v2.04</b><div><h2>单摆小角度规律发现</h2><p>新增 T²-L 线性识别，估计 g，并展示 T = 2π√(L/g)。</p></div></section>
+    <section class="version"><b>v2.05</b><div><h2>行星轨道规律发现</h2><p>新增开普勒第三定律识别，从多轨道数据发现 T² ∝ r³。</p></div></section>
+    <section class="version"><b>v2.06</b><div><h2>反平方定律发现</h2><p>新增幂律指数估计，识别 F ∝ 1/r² 类型的场强衰减。</p></div></section>
+    <section class="version"><b>v2.07</b><div><h2>胡克定律发现</h2><p>新增弹簧形变-回复力线性拟合，估计弹性系数 k。</p></div></section>
+    <section class="version"><b>v2.08</b><div><h2>欧姆定律发现</h2><p>新增电流-电压线性关系识别，估计未知电阻 R。</p></div></section>
+    <section class="version"><b>v2.09</b><div><h2>扩散规律发现</h2><p>新增均方位移随时间线性增长识别，估计扩散系数 D。</p></div></section>
+    <section class="version"><b>v2.10</b><div><h2>牛顿冷却定律发现</h2><p>新增指数衰减拟合，识别 T - Tenv = ΔT₀e^(-kt)。</p></div></section>
+    <section class="version"><b>v2.11</b><div><h2>波速规律发现</h2><p>新增频率与波长反比识别，估计介质波速 v = fλ。</p></div></section>
+    <section class="version"><b>v2.12</b><div><h2>声学多普勒效应发现</h2><p>新增相对速度造成频移的识别，展示接近升频、远离降频。</p></div></section>
+    <section class="version"><b>v2.13</b><div><h2>流体阻力规律发现</h2><p>新增高速阻力与速度平方关系识别，拟合 Fd ∝ v²。</p></div></section>
+    <section class="version"><b>v2.14</b><div><h2>伯努利规律发现</h2><p>新增流速增大、静压下降的数据识别，展示 P + 1/2ρv² = const。</p></div></section>
+    <section class="version"><b>v2.15</b><div><h2>理想气体规律发现</h2><p>新增定容条件下压强与绝对温度成正比识别，展示 PV = nRT。</p></div></section>
+    <section class="version"><b>v2.16</b><div><h2>放射性衰变规律发现</h2><p>新增指数衰变拟合，估计衰变常数 λ 与半衰期。</p></div></section>
+    <section class="version"><b>v2.17</b><div><h2>洛伦兹力规律发现</h2><p>新增带电粒子磁场受力与速度线性关系识别，估计 qB。</p></div></section>
+    <section class="version"><b>v2.18</b><div><h2>RC 充放电规律发现</h2><p>新增一阶电路渐近响应识别，估计时间常数 τ = RC。</p></div></section>
+    <section class="version"><b>v2.19</b><div><h2>热传导规律发现</h2><p>新增热流与温度梯度负线性关系识别，展示 q = -k∇T。</p></div></section>
+    <section class="version"><b>v2.20</b><div><h2>相对论动能规律发现</h2><p>新增高速能量非线性增长识别，展示 Eₖ = (γ-1)mc²。</p></div></section>
+    <section class="version"><b>v2.21</b><div><h2>光电效应规律发现</h2><p>新增阈值频率与最大动能线性关系识别，展示 Kmax = hf - φ。</p></div></section>
+    <section class="version"><b>v2.22</b><div><h2>布拉格衍射规律发现</h2><p>新增晶体衍射峰位置识别，展示 nλ = 2d sinθ。</p></div></section>
+    <section class="version"><b>v2.23</b><div><h2>斯涅尔定律发现</h2><p>新增入射角和折射角正弦比例识别。</p></div></section>
+    <section class="version"><b>v2.24</b><div><h2>马吕斯定律发现</h2><p>新增偏振光强随 cos²θ 变化识别。</p></div></section>
+    <section class="version"><b>v2.25</b><div><h2>向心力规律发现</h2><p>新增圆周运动中向心力与速度平方关系识别。</p></div></section>
+    <section class="version"><b>v2.26</b><div><h2>转动定律发现</h2><p>新增力矩与角加速度线性关系识别，展示 τ = Iα。</p></div></section>
+    <section class="version"><b>v2.27</b><div><h2>角动量规律发现</h2><p>新增角动量与角速度线性关系识别。</p></div></section>
+    <section class="version"><b>v2.28</b><div><h2>重力势能规律发现</h2><p>新增能量与高度线性关系识别，展示 U = mgh。</p></div></section>
+    <section class="version"><b>v2.29</b><div><h2>毛细上升规律发现</h2><p>新增液柱高度与管半径倒数关系识别。</p></div></section>
+    <section class="version"><b>v2.30</b><div><h2>泊肃叶定律发现</h2><p>新增管流流量与半径四次方关系识别。</p></div></section>
+    <section class="version"><b>v2.31</b><div><h2>斯托克斯阻力发现</h2><p>新增低雷诺数条件下黏性阻力与速度线性关系识别。</p></div></section>
+    <section class="version"><b>v2.32</b><div><h2>终端速度规律发现</h2><p>新增小颗粒沉降终端速度与半径平方关系识别。</p></div></section>
+    <section class="version"><b>v2.33</b><div><h2>法拉第电磁感应发现</h2><p>新增磁通变化率与感应电动势线性关系识别。</p></div></section>
+    <section class="version"><b>v2.34</b><div><h2>变压器比例规律发现</h2><p>新增电压比与线圈匝数比关系识别。</p></div></section>
+    <section class="version"><b>v2.35</b><div><h2>库仑定律发现</h2><p>新增电荷作用力与距离反平方关系识别。</p></div></section>
+    <section class="version"><b>v2.36</b><div><h2>斯特藩-玻尔兹曼定律发现</h2><p>新增黑体辐射功率与温度四次方关系识别。</p></div></section>
+    <section class="version"><b>v2.37</b><div><h2>维恩位移规律发现</h2><p>新增峰值波长与温度反比关系识别。</p></div></section>
+    <section class="version"><b>v2.38</b><div><h2>普朗克关系发现</h2><p>新增光子能量与频率线性关系识别。</p></div></section>
+    <section class="version"><b>v2.39</b><div><h2>德布罗意波长发现</h2><p>新增物质波长与动量倒数关系识别。</p></div></section>
+    <section class="version"><b>v2.40</b><div><h2>康普顿散射规律发现</h2><p>新增散射角与波长增量关系识别。</p></div></section>
+    <section class="version"><b>v2.41</b><div><h2>弹簧频率规律发现</h2><p>新增频率平方与质量倒数关系识别。</p></div></section>
+    <section class="version"><b>v2.42</b><div><h2>共振峰规律发现</h2><p>新增驱动频率扫描中的最大响应频率识别。</p></div></section>
+    <section class="version"><b>v2.43</b><div><h2>液体静压规律发现</h2><p>新增压强随深度线性增加识别。</p></div></section>
+    <section class="version"><b>v2.44</b><div><h2>阿基米德浮力发现</h2><p>新增浮力与排开体积线性关系识别。</p></div></section>
+    <section class="version"><b>v2.45</b><div><h2>黏性剪切规律发现</h2><p>新增剪切应力与速度梯度线性关系识别。</p></div></section>
+    <section class="version"><b>v2.46</b><div><h2>弦振动频率规律发现</h2><p>新增频率与张力平方根关系识别。</p></div></section>
+    <section class="version"><b>v2.47</b><div><h2>等熵气体规律发现</h2><p>新增绝热压缩过程中的 PV^γ = const 识别。</p></div></section>
+    <section class="version"><b>v2.48</b><div><h2>霍尔效应规律发现</h2><p>新增横向电压与电流磁场乘积关系识别。</p></div></section>
+    <section class="version"><b>v2.49</b><div><h2>等离子频率规律发现</h2><p>新增频率平方与电子密度线性关系识别。</p></div></section>
+    <section class="version"><b>v2.50</b><div><h2>哈勃定律发现</h2><p>新增星系距离与退行速度线性关系识别，展示 v = H₀d。</p></div></section>
+    <section class="version"><b>v2.51</b><div><h2>运动学与动力学公式组</h2><p>新增匀速、匀加速、自由落体、牛顿定律、摩擦、环绕速度与开普勒规律等基础公式，并将物理规律发现实验室目录升级为分类结构。</p></div></section>
+    <section class="version"><b>v2.52</b><div><h2>功能动量、热学与电磁核心方程组</h2><p>新增功、功率、动能、势能、机械能守恒、动量、冲量、热学三定律、相变潜热、电场、电势、电容、电阻、电功率、基尔霍夫、安培力、回旋半径和正弦交流电等规律发现入口。</p></div></section>
+    <section class="version"><b>v2.53</b><div><h2>麦克斯韦方程组与电磁场统一</h2><p>新增高斯电场定律、高斯磁场定律、法拉第感应定律、安培-麦克斯韦定律和电磁波速度，展示电与磁如何统一为电磁场理论。</p></div></section>
+    <section class="version"><b>v2.54</b><div><h2>光学几何与波动方程组</h2><p>新增全反射临界角、薄透镜成像、双缝干涉条纹和光栅方程，并将斯涅尔定律、马吕斯定律归入光学几何与波动分类。</p></div></section>
+    <section class="version"><b>v2.55</b><div><h2>近代物理：相对论与量子初步</h2><p>新增质能等价、时间膨胀、长度收缩、光电效应方程、不确定性原理、氢原子能级和能级跃迁光子，并归并已有相对论与量子相关规律。</p></div></section>
+    <section class="version"><b>v2.56</b><div><h2>分析力学：理论力学深化</h2><p>新增拉格朗日方程、哈密顿正则方程、最小作用量原理、诺特定理和角动量定理，展示从牛顿力学到对称性与作用量的统一表达。</p></div></section>
+    <section class="version"><b>v2.57</b><div><h2>量子力学核心方程</h2><p>新增含时薛定谔方程、定态薛定谔方程、正则对易关系、动量算符、泡利矩阵、全同粒子对称性和费米黄金定则，并归并德布罗意、普朗克、康普顿等量子规律。</p></div></section>
+    <section class="version"><b>v2.58</b><div><h2>热力学与统计物理方程组</h2><p>新增热力学基本方程、热力学势、麦克斯韦关系、玻尔兹曼熵、正则配分函数、玻色-爱因斯坦分布、费米-狄拉克分布和普朗克黑体辐射。</p></div></section>
+    <section class="version"><b>v2.59</b><div><h2>固体物理与凝聚态核心方程组</h2><p>新增布洛赫定理、有效质量、德拜 T³ 定律和费米能，展示周期晶格、能带曲率、低温声子热容与自由电子气规律。</p></div></section>
+    <section class="version"><b>v2.60</b><div><h2>量子场论与标准模型方程组</h2><p>新增 QED 拉格朗日量、狄拉克方程、路径积分生成泛函、标准模型规范群和希格斯机制，展示粒子与场的统一描述。</p></div></section>
+    <section class="version"><b>v2.61</b><div><h2>广义相对论与宇宙学方程组</h2><p>新增爱因斯坦场方程、测地线方程、史瓦西度规和弗里德曼方程，展示引力、时空几何与宇宙膨胀动力学。</p></div></section>
+    <section class="version"><b>v2.62</b><div><h2>弦论与量子引力前沿框架</h2><p>新增 Polyakov 作用量、AdS/CFT 对偶和圈量子引力自旋网络，展示世界面、全息对偶和离散量子几何。</p></div></section>
+    <section class="version"><b>v2.63</b><div><h2>物理规律分类体系精修</h2><p>为 discoveryLaws 全量补充显式分类，新增固定 categoryOrder，合并模糊分类“光学与现代物理”，统一“振动、波动与声学”和“流体、连续介质与输运”的教学排序。</p></div></section>
+    <section class="version"><b>v2.64</b><div><h2>PMA相互作用动力学</h2><p>新增两个粒子间相互作用力控制方程，表达径向弹性、切向/吸引弹性、阻尼、额外恢复项与外力合成，可作为 PMA continuum simulation 的动力学控制方程。</p></div></section>
+    <section class="version"><b>v2.65</b><div><h2>PMA控制方程图解增强</h2><p>为 PMA 粒子相互作用动力学新增专用 Canvas 图解，展示两粒子相互作用、R₀/Rₐ/Rlim、排斥-吸引-塑性力距曲线和控制方程分解。</p></div></section>
+    <section class="version"><b>v2.66</b><div><h2>PMA方程单行渲染修正</h2><p>将 PMA 图解中的控制方程由简写改为完整求和形式，并为右侧公式区域增加长公式单行显示样式，确保方程可按一行正确呈现。</p></div></section>
+    <section class="version"><b>v2.67</b><div><h2>PMA方程参考图格式渲染</h2><p>将 PMA 方程升级为参考图样式：左侧分式、每个求和项独立排列，并在项下方显示径向弹性、切向/吸引弹性、阻尼、额外恢复项和外力标签。</p></div></section>
+    <section class="version"><b>v2.68</b><div><h2>PMA图解字体清晰度优化</h2><p>降低 PMA Canvas 图解和右侧结构化公式的字体字重，减轻曲线与箭头线宽，减少粗体造成的模糊感。</p></div></section>
+    <section class="version"><b>v2.69</b><div><h2>物理规律公式与图像一致性审计</h2><p>逐类核对 148 条规律，修正多条平方、四次方、反平方、倒数和幂律图像的横轴表达；补全变量释义，修正洛伦兹力角度项、角动量定理命名、史瓦西度规与希格斯机制的图像变量，使公式、解释、数据生成和拟合输出保持一致。</p></div></section>
+    <section class="version"><b>v2.70</b><div><h2>公式图例变量对应审计</h2><p>逐条核对 148 条规律的公式与图例解释，补全抛体、扩散、气体、热力学、电磁、相对论、量子场论、广义相对论和弦论条目的关键变量释义；将平方项、线性化横轴、守恒常量、生成泛函两侧和张量/导数符号解释与公式表达对齐。</p></div></section>
+    <a class="back" href="index.html#s24">返回物理规律发现实验室</a>
+  </main>
+</body>
+</html>
