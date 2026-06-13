@@ -751,6 +751,60 @@ p{margin:0}
   background:rgba(0,229,255,.06);
   white-space:nowrap;
 }
+.formula-legend.dynamic{
+  display:grid;
+  grid-template-columns:1fr;
+  justify-content:stretch;
+  gap:8px;
+}
+.formula-legend.dynamic span{
+  display:grid;
+  grid-template-columns:minmax(52px,.45fr) 1fr;
+  gap:4px 10px;
+  align-items:start;
+  border-radius:8px;
+  padding:9px 11px;
+  white-space:normal;
+}
+.formula-legend.dynamic b{color:var(--cyan);font-size:13px}
+.formula-legend.dynamic small{color:var(--muted);font-size:12px;line-height:1.35}
+.formula-legend.dynamic em{
+  grid-column:1 / -1;
+  color:var(--amber);
+  font-style:normal;
+  font-size:12px;
+  opacity:.92;
+}
+.formula-legend.dynamic .scope{
+  border-color:rgba(255,193,7,.36);
+  background:rgba(255,193,7,.06);
+}
+.formula-legend.dynamic .scope b{color:var(--amber)}
+.law-controls{
+  display:grid;
+  gap:9px;
+  margin:14px 0 12px;
+  padding:12px;
+  border:1px solid rgba(0,229,255,.18);
+  border-radius:8px;
+  background:rgba(0,229,255,.045);
+}
+.law-controls label{
+  display:grid;
+  grid-template-columns:72px 1fr 54px;
+  gap:10px;
+  align-items:center;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+.law-controls input{width:100%;accent-color:#00E5FF}
+.law-controls b{
+  color:var(--cyan);
+  font-size:12px;
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
 .formula-legend.compact{margin-top:9px;gap:6px;font-size:12px}
 .formula-legend.compact span{padding:4px 7px}
 .law-capsule .formula-legend{

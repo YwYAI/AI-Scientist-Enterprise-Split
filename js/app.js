@@ -942,13 +942,47 @@
       const term = (sum, body, label) => `<span class="pma-term"><span class="pma-body"><span class="pma-sum">${sum}<small>j≠i</small></span><span>${body}</span></span><em>${label}</em></span>`;
       return `<span class="pma-eq"><span class="pma-mass">m</span><span class="pma-frac"><b>dvᵢ</b><i>dt</i></span><span class="pma-op">=</span>${term("Σ","kᵣ·xⱼᵢ","径向弹性")}<span class="pma-op">+</span>${term("Σ","kₐ·xⱼᵢ","切向/吸引弹性")}<span class="pma-op">+</span>${term("Σ","cᵣ·vⱼᵢ","阻尼")}<span class="pma-op">+</span>${term("Σ","kᵣₑ·xⱼᵢ","额外恢复项")}<span class="pma-op">+</span><span class="pma-force"><b>Fᵢ</b><em>外力</em></span></span>`;
     }
+    const labState = {xScale:1, yScale:1, noise:.02};
+    const fmt = value => Number.isFinite(value) ? (Math.abs(value) >= 100 ? value.toFixed(1) : Math.abs(value) >= 10 ? value.toFixed(2) : value.toFixed(3)) : "n/a";
+    const esc = value => String(value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+    function adjustedData(data){
+      return data.map(point => ({
+        x: point.x * labState.xScale,
+        y: point.y * labState.yScale + noise(labState.noise)
+      }));
+    }
+    function dynamicLegendHTML(law, metrics, data){
+      const xs = data.map(p => p.x), ys = data.map(p => p.y);
+      const metricText = metrics.map(([key, value]) => `${key} ${value}`);
+      const spans = law.legend.map(item => {
+        const [rawSymbol, ...rest] = item.split("：");
+        const symbol = rawSymbol.trim();
+        const desc = rest.join("：").trim() || item;
+        const hit = metricText.find(text => text.includes(symbol) || text.includes(desc.slice(0, 2)));
+        const estimate = hit ? `<em>本轮估计：${esc(hit)}</em>` : "";
+        return `<span><b>${esc(symbol)}</b><small>${esc(desc)}</small>${estimate}</span>`;
+      });
+      spans.unshift(`<span class="scope"><b>数据窗口</b><small>x: ${fmt(Math.min(...xs))} ~ ${fmt(Math.max(...xs))} · y: ${fmt(Math.min(...ys))} ~ ${fmt(Math.max(...ys))}</small><em>参数强度 ${labState.yScale.toFixed(2)}x · 横轴尺度 ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`);
+      return spans.join("");
+    }
+    function syncLawControls(){
+      const y = $("#lawYScale"), x = $("#lawXScale"), n = $("#lawNoise");
+      if(!y || !x || !n) return;
+      labState.yScale = Number(y.value) / 100;
+      labState.xScale = Number(x.value) / 100;
+      labState.noise = Number(n.value) / 1000;
+      $("#lawYScaleValue").textContent = labState.yScale.toFixed(2) + "x";
+      $("#lawXScaleValue").textContent = labState.xScale.toFixed(2) + "x";
+      $("#lawNoiseValue").textContent = labState.noise.toFixed(3);
+    }
     function render(){
-      const law = laws[active], data = law.gen(), metrics = law.fit(data);
+      syncLawControls();
+      const law = laws[active], data = adjustedData(law.gen()), metrics = law.fit(data);
       if(law.visual === "pma") drawPMA(data); else draw(data);
       $("#lawTitle").textContent = law.name;
       if(law.visual === "pma") $("#lawFormula").innerHTML = pmaEquationHTML(); else $("#lawFormula").textContent = law.formula;
       $("#lawFormula").classList.toggle("formula-tight", law.visual === "pma");
-      $("#lawLegend").innerHTML = law.legend.map(x=>`<span>${x}</span>`).join("");
+      $("#lawLegend").innerHTML = dynamicLegendHTML(law, metrics, data);
       $("#lawInsight").textContent = law.insight;
       $("#lawMetrics").innerHTML = metrics.map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join("");
       $$("#lawMenu button").forEach((b,i)=>b.classList.toggle("active",i===active));
@@ -967,6 +1001,7 @@
       });
     menu.innerHTML = groups.map(group=>`<div class="law-group"><h4>${group.name}</h4>${group.items.map(({law,i})=>`<button type="button" data-law="${i}">${law.name}<span>${law.sub}</span></button>`).join("")}</div>`).join("");
     menu.addEventListener("click", e=>{const btn=e.target.closest("[data-law]");if(!btn)return;active=Number(btn.dataset.law);render();});
+    $$("#lawControls input").forEach(input => input.addEventListener("input", render));
     $("#lawRegenerate")?.addEventListener("click", render);
     render();
   }
