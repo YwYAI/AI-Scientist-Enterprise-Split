@@ -93,7 +93,7 @@ window.AI_SCIENTIST_CONTENT = [
     title:"科学发现流程",
     time:"2分钟",
     notes:{points:["科学不是灵感一闪，而是观察、建模、预测、验证、修正的闭环流程。","AI Scientist 的价值，是把这个闭环加速、放大、自动化，并把失败实验转化为下一轮更好的假设。"],question:"企业研发卡住时，通常卡在观察、建模、验证，还是失败后的修正？",control:"先逐个点击流程块，再讲底部反馈回路：验证失败不是终点，而是新假设的起点。"},
-    html:`<section class="chapter" id="s3"><h2>第4章 科学发现流程</h2><div id="flowGrid" class="flow-grid"></div><div class="discovery-feedback panel"><div><strong>验证失败</strong><span>预测和实验不一致</span></div><i>→</i><div><strong>修改假设</strong><span>寻找遗漏变量或错误机制</span></div><i>→</i><div><strong>重新建模</strong><span>让理论更接近真实世界</span></div></div></section>`
+    html:`<section class="chapter" id="s3"><h2>第4章 科学发现流程</h2><div class="flow-guide" role="button" tabindex="0" aria-label="点击流程块或按左右键展开科学发现步骤"><span>点击流程块</span><b>或按 ← →</b><em>逐步展开科学发现流程</em></div><div id="flowGrid" class="flow-grid"></div><div class="discovery-feedback panel"><div><strong>验证失败</strong><span>预测和实验不一致</span></div><i>→</i><div><strong>修改假设</strong><span>寻找遗漏变量或错误机制</span></div><i>→</i><div><strong>重新建模</strong><span>让理论更接近真实世界</span></div></div></section>`
   },
   {
     title:"人脑 VS AI",

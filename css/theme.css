@@ -219,6 +219,26 @@ p{margin:0}
 .ai-compare-guide b{color:#fff}
 .ai-compare-guide em{color:var(--amber);font-style:normal}
 .ai-compare-guide:focus-visible,.ai-ability-card:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.flow-guide{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 18px;
+  padding:9px 13px;
+  border:1px solid rgba(0,229,255,.38);
+  border-radius:999px;
+  background:rgba(0,229,255,.08);
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  user-select:none;
+  box-shadow:0 0 24px rgba(0,229,255,.10);
+}
+.flow-guide span{color:var(--cyan)}
+.flow-guide b{color:#fff}
+.flow-guide em{color:var(--amber);font-style:normal}
+.flow-guide:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 .ai-ability-card{
   cursor:pointer;
   opacity:.72;
@@ -661,6 +681,7 @@ p{margin:0}
   transition:max-height .38s ease,opacity .28s ease .08s,transform .28s ease .08s,margin .28s ease;
 }
 .flow-step.open{background:rgba(0,229,255,.16)}
+.flow-step.current{border-color:rgba(255,193,7,.52);box-shadow:0 0 34px rgba(0,229,255,.14),inset 0 0 0 1px rgba(255,193,7,.18)}
 .flow-step.open p{
   max-height:96px;
   margin-top:8px;

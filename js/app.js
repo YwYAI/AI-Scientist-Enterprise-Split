@@ -65,6 +65,20 @@
     setCurrent(index);
   }
   let aiAbilityStep = 0;
+  let flowStepIndex = 0;
+  function flowSteps(){
+    const section = $("#s3");
+    return section ? $$(".flow-step", section) : [];
+  }
+  function setFlowStep(step){
+    const steps = flowSteps();
+    if(!steps.length) return;
+    flowStepIndex = Math.max(0, Math.min(steps.length, step));
+    steps.forEach((node, i) => {
+      node.classList.toggle("open", i < flowStepIndex);
+      node.classList.toggle("current", i === flowStepIndex - 1);
+    });
+  }
   function aiAbilityCards(){
     const section = $("#s4");
     return section ? $$(".ai-ability-card", section) : [];
@@ -116,6 +130,11 @@
   setSidebarOpen(true);
   document.addEventListener("keydown", e => {
     const key = e.key.toLowerCase();
+    if(isActiveSection("s3") && (e.key === "ArrowRight" || e.key === "ArrowLeft")){
+      e.preventDefault();
+      setFlowStep(flowStepIndex + (e.key === "ArrowRight" ? 1 : -1));
+      return;
+    }
     if(isActiveSection("s4") && (e.key === "ArrowRight" || e.key === "ArrowLeft")){
       e.preventDefault();
       setAiAbilityStep(aiAbilityStep + (e.key === "ArrowRight" ? 1 : -1));
@@ -140,6 +159,15 @@
       e.preventDefault();
       document.activeElement.click();
     }
+    if((e.key === "Enter" || e.key === " ") && document.activeElement?.classList.contains("flow-step")){
+      e.preventDefault();
+      const step = Number(document.activeElement.dataset.flowStep || 0);
+      setFlowStep(step + 1);
+    }
+    if((e.key === "Enter" || e.key === " ") && document.activeElement?.classList.contains("flow-guide")){
+      e.preventDefault();
+      setFlowStep(flowStepIndex + 1);
+    }
     if((e.key === "Enter" || e.key === " ") && document.activeElement?.classList.contains("ai-ability-card")){
       e.preventDefault();
       const step = Number(document.activeElement.dataset.abilityStep || 0);
@@ -160,6 +188,11 @@
         go(targetIndex);
         setCurrent(targetIndex);
       }
+      return;
+    }
+    const flowGuide = e.target.closest(".flow-guide");
+    if(flowGuide){
+      setFlowStep(flowStepIndex + 1);
       return;
     }
     const guide = e.target.closest(".ai-compare-guide");
@@ -185,7 +218,8 @@
     }
     const flowStep = e.target.closest(".flow-step");
     if(flowStep){
-      flowStep.classList.toggle("open");
+      const step = Number(flowStep.dataset.flowStep || 0);
+      setFlowStep(step + 1);
       return;
     }
     if(e.target.matches(".quiz-option")){
@@ -270,7 +304,7 @@
   function initFlow(){
     const names = ["观察","测量","模式","假设","数学模型","预测","验证","理论"];
     const desc = ["看见现象：苹果落下、月亮绕行、工厂波动。","把现象变成数字，建立可分析的数据。","在数据中寻找稳定结构和重复关系。","提出可能的原因和机制。","用公式或模型表达关系。","用模型推断尚未发生的结果。","用实验或现实数据检验预测。","经受反复验证后形成可传播的解释体系。"];
-    $("#flowGrid").innerHTML = names.map((name,i)=>`<div class="flow-step"><em>${String(i + 1).padStart(2,"0")}</em><strong>${name}</strong><p>${desc[i]}</p></div>`).join("");
+    $("#flowGrid").innerHTML = names.map((name,i)=>`<div class="flow-step" data-flow-step="${i}" tabindex="0"><em>${String(i + 1).padStart(2,"0")}</em><strong>${name}</strong><p>${desc[i]}</p></div>`).join("");
   }
 
   function initNetwork(){
