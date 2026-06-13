@@ -102,8 +102,14 @@
   setSidebarOpen(true);
   document.addEventListener("keydown", e => {
     const key = e.key.toLowerCase();
-    if(e.key === "ArrowRight") go(current + 1);
-    if(e.key === "ArrowLeft") go(current - 1);
+    if(e.key === "ArrowDown"){
+      e.preventDefault();
+      go(current + 1);
+    }
+    if(e.key === "ArrowUp"){
+      e.preventDefault();
+      go(current - 1);
+    }
     if(key === "n") document.body.classList.toggle("notes-open");
     if(key === "p") document.body.classList.toggle("presenter");
     if(key === "m") toggleSidebar();
