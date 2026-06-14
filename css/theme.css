@@ -163,6 +163,60 @@ body.sidebar-closed .sidebar-toggle-fab{
   pointer-events:none;
 }
 .chapter>*{position:relative;z-index:1}
+.skill-visual-audit{
+  position:absolute;
+  left:74px;
+  bottom:18px;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  max-width:calc(100% - 170px);
+  padding:7px 9px;
+  border:1px solid rgba(0,229,255,.18);
+  border-radius:8px;
+  background:rgba(5,8,22,.54);
+  backdrop-filter:blur(14px);
+  color:rgba(176,190,197,.74);
+  font-size:11px;
+  font-weight:900;
+  pointer-events:none;
+  opacity:.72;
+  box-shadow:0 12px 34px rgba(0,0,0,.18);
+}
+.skill-visual-audit b{
+  color:rgba(0,229,255,.78);
+  font-size:12px;
+  letter-spacing:.08em;
+}
+.skill-visual-audit span{
+  padding:3px 7px;
+  border-radius:999px;
+  background:rgba(0,229,255,.07);
+  border:1px solid rgba(0,229,255,.13);
+  white-space:nowrap;
+}
+.skill-visual-audit em{
+  color:rgba(255,193,7,.82);
+  font-style:normal;
+  white-space:nowrap;
+}
+.skill-visual-audit.engineering{
+  border-color:rgba(255,193,7,.30);
+  background:linear-gradient(90deg,rgba(255,193,7,.10),rgba(5,8,22,.58));
+  opacity:.9;
+}
+.skill-boundary-section .panel,
+.skill-boundary-section .stage,
+.skill-boundary-section .canvas-box{
+  box-shadow:0 20px 60px rgba(0,0,0,.24),inset 0 0 0 1px rgba(255,193,7,.045);
+}
+.visible.skill-boundary-section .skill-visual-audit.engineering{
+  animation:skillAuditPulse 3.8s ease-in-out infinite;
+}
+@keyframes skillAuditPulse{
+  50%{border-color:rgba(255,193,7,.55);box-shadow:0 12px 34px rgba(0,0,0,.18),0 0 24px rgba(255,193,7,.12)}
+}
 .hero{text-align:center;align-items:center;justify-content:center}
 .kicker{color:var(--cyan);font-size:14px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
 h1{font-size:clamp(48px,5vw,92px);line-height:1.08;margin:0 0 22px;font-weight:900;letter-spacing:0;text-shadow:0 0 34px rgba(0,229,255,.32)}
@@ -1644,6 +1698,11 @@ svg{max-width:100%;height:auto}
   font-size:clamp(30px,2.45vw,44px);
   line-height:1.08;
 }
+.physics-lab-chapter .skill-visual-audit{
+  left:36px;
+  bottom:8px;
+  opacity:.46;
+}
 .physics-lab-chapter .logic-strip{
   margin:0;
   padding:10px 12px;
@@ -1854,6 +1913,29 @@ body.presenter .chapter{min-height:100vh}
   padding:10px 12px;
   border-radius:6px;
 }
+.skill-compliance-note{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  z-index:24;
+  max-width:min(620px,calc(100vw - 420px));
+  padding:8px 10px;
+  border:1px solid rgba(255,193,7,.14);
+  border-radius:6px;
+  background:rgba(5,8,22,.34);
+  color:rgba(176,190,197,.42);
+  font-size:10px;
+  line-height:1.45;
+  font-weight:700;
+  backdrop-filter:blur(12px);
+  opacity:.58;
+  transition:opacity .18s ease,color .18s ease,border-color .18s ease;
+}
+.skill-compliance-note:hover{
+  opacity:.92;
+  color:rgba(176,190,197,.82);
+  border-color:rgba(255,193,7,.28);
+}
 @media(max-width:1200px){
   :root{--nav-width:244px}
   .chapter{padding:58px 34px}
@@ -1866,6 +1948,8 @@ body.presenter .chapter{min-height:100vh}
   .factory{grid-template-columns:1fr 1fr}
   .scientist-loop{height:520px}
   .future-roadmap{grid-template-columns:1fr 1fr}
+  .skill-visual-audit{display:none}
+  .skill-compliance-note{display:none}
 }
 @media(max-width:1400px) and (min-width:961px){
   .galileo-chapter{padding-top:52px;padding-bottom:34px}
@@ -2048,6 +2132,14 @@ body.presenter .chapter{min-height:100vh}
     padding:34px 28px 26px;
     gap:8px;
   }
+  .skill-visual-audit{
+    left:56px;
+    bottom:10px;
+    font-size:10px;
+    padding:5px 7px;
+  }
+  .skill-visual-audit span{padding:2px 5px}
+  .physics-lab-chapter .skill-visual-audit{display:none}
   .physics-lab-chapter h2{font-size:clamp(28px,2.2vw,38px)}
   .physics-lab-chapter .logic-strip{padding:8px 10px}
   .physics-lab-chapter .logic-strip span,

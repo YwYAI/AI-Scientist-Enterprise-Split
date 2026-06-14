@@ -616,6 +616,48 @@
     }
   }
 
+  function initSkillVisualGovernance(){
+    const engineeringIds = new Set(["s9","s11","s17","s24"]);
+    const roleById = {
+      s1:["实验演示","测量变量","概念验证"],
+      s2:["SVG现象统一","公式解释","概念演示"],
+      s3:["流程模型","验证闭环","方法论"],
+      s4:["对比矩阵","能力展开","概念演示"],
+      s5:["神经网络动画","Loss曲线","参数学习"],
+      s6:["Canvas拟合","数据交互","模型估计"],
+      s7:["因果判断","问答揭示","变量解释"],
+      s8:["符号搜索","公式组合","可解释性"],
+      s21:["真实案例","方法证据","边界承接"],
+      s9:["PINN解释层","CFD边界","需求解器验证"],
+      s10:["世界模型","轨迹预测","反馈校正"],
+      s11:["数字孪生","工程看板","需现场验证"],
+      s12:["自动科研闭环","实验平台","安全审核"],
+      s22:["自动实验室","LIMS回流","主动学习"],
+      s13:["材料筛选","高通量漏斗","实验验证"],
+      s14:["分子筛选","靶点匹配","实验验证"],
+      s15:["未知规律","理论生成","可验证假设"],
+      s16:["全景地图","讲解路径","产业视图"],
+      s17:["工业路线图","系统闭环","人机审核"],
+      s23:["试点计划","验收门槛","组织闭环"],
+      s18:["能力成熟度","阶段门槛","不承诺年份"],
+      s24:["多规律实验室","前端可视化","非工程求解"],
+      s19:["总结定格","观点收束","概念表达"]
+    };
+    sections.forEach((section, index) => {
+      const roles = roleById[section.id] || [
+        section.querySelector("canvas") ? "Canvas交互" : (section.querySelector("svg") ? "SVG可视化" : "概念讲解"),
+        section.querySelector(".formula") ? "公式解释" : "叙事结构",
+        "教学演示"
+      ];
+      const isEngineering = engineeringIds.has(section.id);
+      section.classList.toggle("skill-boundary-section", isEngineering);
+      const audit = document.createElement("div");
+      audit.className = "skill-visual-audit" + (isEngineering ? " engineering" : "");
+      audit.innerHTML = `<b>${String(index).padStart(2,"0")}</b>${roles.map(role=>`<span>${role}</span>`).join("")}${isEngineering ? "<em>前端展示层，不替代工程求解器</em>" : ""}`;
+      section.appendChild(audit);
+    });
+  }
+
   function initPhysicsLab(){
     const canvas = $("#lawCanvas");
     const menu = $("#lawMenu");
@@ -1508,5 +1550,6 @@
   initAtoms();
   initMap();
   initManufacturingRoute();
+  initSkillVisualGovernance();
   initPhysicsLab();
 })();
