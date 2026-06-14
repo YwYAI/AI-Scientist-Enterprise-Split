@@ -856,7 +856,8 @@
       if(/QED|狄拉克|路径积分|标准模型|希格斯|爱因斯坦|测地线|史瓦西|弗里德曼|Polyakov|AdS|圈量子|热力学基本|拉格朗日|哈密顿|最小作用量|麦克斯韦/.test(n)) return {name:"OpenModelica-style", tag:"方程驱动", note:"控制方程 + 状态变量 + 求解关系"};
       if(/行星|环绕|开普勒|抛体|向心|单摆|转动|角动量|刚体|洛伦兹|回旋|波速|多普勒|弦振动/.test(n)) return {name:"VPython-style", tag:"浏览器3D动画", note:"WebGL对象 + 轨迹 + 可导航实时变量"};
       if(/匀速|加速度|自由落体|数据|扩散|冷却|衰变|光电|布拉格|马吕斯|斯涅尔|康普顿|普朗克|德布罗意/.test(n)) return {name:"Tracker-style", tag:"实验分析", note:"观测点 + 模型曲线 + 残差"};
-      if(/欧姆|电阻|电容|RC|变压器|电功率|电场|库仑|安培|法拉第|磁|电势/.test(n)) return {name:"OSP/EJS-style", tag:"可编程模型", note:"参数控件 + 可检查模型结构"};
+      if(/欧姆|电阻|电容|RC|变压器|电功率|基尔霍夫|二极管|运放|电路/.test(n)) return {name:"CircuitJS-style", tag:"浏览器电路仿真", note:"元件拓扑 + 电压颜色 + 电流流动"};
+      if(/电场|库仑|安培|法拉第|磁|电势|洛伦兹|霍尔|麦克斯韦/.test(n)) return {name:"OSP/EJS-style", tag:"可编程模型", note:"参数控件 + 可检查模型结构"};
       if(/热|气体|流体|伯努利|泊肃叶|斯托克斯|毛细|浮力|摩擦|功|能|动量|胡克/.test(n) || c.includes("运动学")) return {name:"PhET-style", tag:"概念探索", note:"可拖动参数 + 因果反馈"};
       return {name:"OSP/EJS-style", tag:"建模探索", note:"变量映射 + 模型曲线"};
     }
@@ -913,7 +914,7 @@
       } else if(/行星|开普勒|环绕|万有引力|反平方|重力/.test(n)){
         ctx.fillStyle="#FFC107";ctx.beginPath();ctx.arc(x+86,y+64,17,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#00E5FF";ctx.beginPath();ctx.ellipse(x+102,y+64,66,30,-.25,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#4CAF50";ctx.beginPath();ctx.arc(x+152,y+47,7,0,Math.PI*2);ctx.fill();ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("r 改变引力/周期",x+58,y+102);
       } else if(/欧姆|电阻|电容|RC|电功率|变压器|基尔霍夫/.test(n)){
-        ctx.strokeStyle="#00E5FF";ctx.beginPath();ctx.moveTo(x+28,y+62);ctx.lineTo(x+62,y+62);ctx.rect(x+62,y+48,54,28);ctx.moveTo(x+116,y+62);ctx.lineTo(x+166,y+62);ctx.stroke();ctx.fillStyle="#FFC107";ctx.font="700 13px Consolas";ctx.fillText("I → V",x+76,y+68);ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("元件参数可调",x+66,y+100);
+        ctx.strokeStyle="#00E5FF";ctx.beginPath();ctx.moveTo(x+28,y+62);ctx.lineTo(x+62,y+62);ctx.rect(x+62,y+48,54,28);ctx.moveTo(x+116,y+62);ctx.lineTo(x+166,y+62);ctx.stroke();ctx.fillStyle="#FFC107";ctx.font="700 13px Consolas";ctx.fillText("I → V",x+76,y+68);ctx.fillStyle="#4CAF50";ctx.beginPath();ctx.arc(x+134,y+62,3,0,Math.PI*2);ctx.arc(x+148,y+62,3,0,Math.PI*2);ctx.fill();ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("电压颜色 / 电流流动",x+48,y+100);
       } else if(/波|多普勒|弦|声|马吕斯|斯涅尔|光栅|干涉|透镜/.test(n)){
         ctx.strokeStyle="#00E5FF";ctx.beginPath();for(let i=0;i<140;i++){const px=x+30+i, py=y+66+18*Math.sin(i/14); if(i)ctx.lineTo(px,py); else ctx.moveTo(px,py);}ctx.stroke();ctx.fillStyle="#FFC107";ctx.beginPath();ctx.arc(x+146,y+66,8,0,Math.PI*2);ctx.fill();ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("相位/频率/角度驱动",x+52,y+100);
       } else if(/热|气体|冷却|黑体|熵|配分/.test(n)){

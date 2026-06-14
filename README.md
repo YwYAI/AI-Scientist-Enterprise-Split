@@ -116,13 +116,15 @@ https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 | OSP Core | https://github.com/OpenSourcePhysics/osp | OSP 核心库思想，支撑物理建模与工具复用 |
 | EJS / OSP EJS | https://github.com/OpenSourcePhysics/osp_ejs | 交互式物理仿真课件的模型-变量-视图组织方式 |
 | EjsS | https://gitlab.com/ejsS | HTML / JavaScript 科学仿真课件生成思路 |
+| CircuitJS1 | https://github.com/sharpie7/circuitjs1 | 浏览器电子电路仿真器，适合欧姆定律、基尔霍夫定律、RC/RLC、电容电感、二极管和运放等电路演示 |
+| Paul Falstad GitHub | https://github.com/pfalstad | Falstad 电路仿真和其他物理可视化项目来源 |
 | VPython Jupyter | https://github.com/vpython/vpython-jupyter | 在 Jupyter / 浏览器中运行 VPython，生成可导航 3D 物理动画 |
 | GlowScript / Web VPython | https://github.com/vpython/glowscript | Web 版 VPython，用 WebGL 生成可导航实时 3D 动画 |
 | VPython 组织页 | https://github.com/vpython | VPython 相关项目集合 |
 | VPython 官网 | https://vpython.org/ | 三维物理对象、运动轨迹、实时变量可视化 |
 | OpenModelica | https://openmodelica.org/ | 方程驱动、多物理系统、状态变量与求解器语义 |
 
-因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`VPython-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。其中 `VPython-style` 主要借鉴 GlowScript / Web VPython 的浏览器 3D、WebGL、可导航实时动画表达。
+因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`CircuitJS-style`、`VPython-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。其中 `CircuitJS-style` 主要借鉴 Falstad / CircuitJS1 的浏览器电路仿真表达，强调元件拓扑、电压颜色和电流流动；`VPython-style` 主要借鉴 GlowScript / Web VPython 的浏览器 3D、WebGL、可导航实时动画表达。
 
 ## 本地运行
 
