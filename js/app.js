@@ -1415,6 +1415,30 @@
       spans.unshift(`<span class="scope"><b>数据窗口</b><small>横轴 ${esc(axis.x)}：${fmt(Math.min(...xs))} ~ ${fmt(Math.max(...xs))}</small><small>纵轴 ${esc(axis.y)}：${fmt(Math.min(...ys))} ~ ${fmt(Math.max(...ys))}</small><em>参数强度 ${labState.yScale.toFixed(2)}x · 横轴尺度 ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`);
       return spans.join("");
     }
+    let categorySelect = null;
+    let lawSelect = null;
+    let currentLawLabel = null;
+    function groupIndexForLaw(index){
+      const groupIndex = groups.findIndex(group => group.items.some(item => item.i === index));
+      return groupIndex >= 0 ? groupIndex : 0;
+    }
+    function populateLawSelect(groupIndex, selectedIndex = active){
+      if(!lawSelect || !groups.length) return;
+      const group = groups[groupIndex] || groups[0];
+      lawSelect.innerHTML = group.items.map(({law,i})=>`<option value="${i}">${esc(law.name)}｜${esc(law.sub)}</option>`).join("");
+      const selectedInGroup = group.items.some(item => item.i === selectedIndex);
+      lawSelect.value = String(selectedInGroup ? selectedIndex : group.items[0].i);
+    }
+    function syncLawDropdowns(){
+      if(!categorySelect || !lawSelect || !groups.length) return;
+      const groupIndex = groupIndexForLaw(active);
+      categorySelect.value = String(groupIndex);
+      populateLawSelect(groupIndex, active);
+      const law = laws[active];
+      if(currentLawLabel && law){
+        currentLawLabel.innerHTML = `<b>${esc(law.name)}</b><span>${esc(law.category)} · ${esc(law.sub)}</span>`;
+      }
+    }
     function syncLawControls(){
       const y = $("#lawYScale"), x = $("#lawXScale"), n = $("#lawNoise");
       if(!y || !x || !n) return;
@@ -1435,7 +1459,7 @@
       $("#lawLegend").innerHTML = dynamicLegendHTML(law, metrics, data);
       $("#lawInsight").textContent = law.insight;
       $("#lawMetrics").innerHTML = metrics.map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join("");
-      $$("#lawMenu button").forEach((b,i)=>b.classList.toggle("active",i===active));
+      syncLawDropdowns();
     }
     const groupsByName = new Map(categoryOrder.map(name => [name, {name, items:[]}]));
     laws.forEach((law,i)=>{
@@ -1449,8 +1473,25 @@
         const bi = categoryOrder.indexOf(b.name);
         return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
       });
-    menu.innerHTML = groups.map(group=>`<div class="law-group"><h4>${group.name}</h4>${group.items.map(({law,i})=>`<button type="button" data-law="${i}">${law.name}<span>${law.sub}</span></button>`).join("")}</div>`).join("");
-    menu.addEventListener("click", e=>{const btn=e.target.closest("[data-law]");if(!btn)return;active=Number(btn.dataset.law);render();});
+    menu.innerHTML = `<div class="law-select-stack"><label><span>规律分类</span><select id="lawCategorySelect" aria-label="选择物理规律分类"></select></label><label><span>具体规律</span><select id="lawSelect" aria-label="选择具体物理规律"></select></label><div class="law-select-current" id="lawSelectCurrent"></div></div>`;
+    categorySelect = $("#lawCategorySelect");
+    lawSelect = $("#lawSelect");
+    currentLawLabel = $("#lawSelectCurrent");
+    if(categorySelect && lawSelect){
+      categorySelect.innerHTML = groups.map((group,i)=>`<option value="${i}">${esc(group.name)}（${group.items.length}）</option>`).join("");
+      categorySelect.addEventListener("change", () => {
+        const group = groups[Number(categorySelect.value)] || groups[0];
+        if(!group) return;
+        active = group.items[0].i;
+        populateLawSelect(Number(categorySelect.value), active);
+        render();
+      });
+      lawSelect.addEventListener("change", () => {
+        active = Number(lawSelect.value);
+        render();
+      });
+      syncLawDropdowns();
+    }
     $$("#lawControls input").forEach(input => input.addEventListener("input", render));
     $("#lawRegenerate")?.addEventListener("click", render);
     render();
