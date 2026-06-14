@@ -6,7 +6,7 @@
 
 https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 
-当前版本：**AI Scientist v2.70**
+当前版本：**AI Scientist v2.73**
 
 ## 项目定位
 
