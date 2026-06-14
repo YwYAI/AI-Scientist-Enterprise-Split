@@ -841,15 +841,186 @@
     function draw(data, law, metrics){
       const w=canvas.width,h=canvas.height,pad=48;
       ctx.clearRect(0,0,w,h);
-      ctx.fillStyle="#071126";ctx.fillRect(0,0,w,h);
+      const mode = toolModeOf(law);
+      const axis = axisInfoOf(law);
+      const object = physicalObjectOf(law);
+      ctx.fillStyle="#061024";ctx.fillRect(0,0,w,h);
+      const bg=ctx.createLinearGradient(0,0,w,h);
+      bg.addColorStop(0,"rgba(0,229,255,.08)");
+      bg.addColorStop(.55,"rgba(5,8,22,.02)");
+      bg.addColorStop(1,"rgba(76,175,80,.08)");
+      ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+      ctx.fillStyle="#fff";ctx.font="800 22px Microsoft YaHei";ctx.fillText(law.name,28,36);
+      ctx.fillStyle="#00E5FF";ctx.font="700 15px Consolas";ctx.fillText(law.formula,28,62);
+      drawModeHeader(mode, w);
+      drawToolPipeline(mode, object, w, h);
+      const sceneBox={x:28,y:92,w:300,h:250};
+      const graphBox={x:352,y:92,w:w-382,h:292};
+      const insightBox={x:28,y:h-126,w:w-56,h:92};
+      drawPanelBox(sceneBox.x,sceneBox.y,sceneBox.w,sceneBox.h,"物理对象场景");
+      drawScenarioScene(law, mode, sceneBox);
+      drawPanelBox(graphBox.x,graphBox.y,graphBox.w,graphBox.h,"变量关系与数据证据");
       const xs=data.map(p=>p.x),ys=data.map(p=>p.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
-      const X=x=>pad+(x-minX)/(maxX-minX||1)*(w-pad*1.5);
-      const Y=y=>h-pad-(y-minY)/(maxY-minY||1)*(h-pad*1.7);
+      const gx=graphBox.x+38, gy=graphBox.y+graphBox.h-38, gw=graphBox.w-64, gh=graphBox.h-74;
+      const X=x=>gx+(x-minX)/(maxX-minX||1)*gw;
+      const Y=y=>gy-(y-minY)/(maxY-minY||1)*gh;
+      drawEvidenceGraph(data, metrics, {x:gx,y:gy,w:gw,h:gh,minX,maxX,minY,maxY,X,Y,axis,mode});
+      drawPanelBox(insightBox.x,insightBox.y,insightBox.w,insightBox.h,"从资料库范式到本页实例");
+      drawInsightStrip(law, mode, metrics, axis, insightBox);
+    }
+    function drawPanelBox(x,y,w,h,title){
+      ctx.fillStyle="rgba(5,8,22,.72)";
+      ctx.strokeStyle="rgba(0,229,255,.24)";
+      ctx.lineWidth=1;
+      roundRectPath(x,y,w,h,10);ctx.fill();ctx.stroke();
+      ctx.fillStyle="#00E5FF";ctx.font="700 12px Microsoft YaHei";ctx.fillText(title,x+14,y+22);
+    }
+    function drawModeHeader(mode,w){
+      ctx.fillStyle="rgba(0,229,255,.10)";
+      ctx.strokeStyle="rgba(0,229,255,.42)";
+      roundRectPath(w-282,18,252,54,9);ctx.fill();ctx.stroke();
+      ctx.fillStyle="#00E5FF";ctx.font="800 13px Microsoft YaHei";ctx.fillText(mode.name,w-266,40);
+      ctx.fillStyle="#B0BEC5";ctx.font="500 11px Microsoft YaHei";ctx.fillText(mode.tag+" · "+mode.note,w-266,59);
+    }
+    function drawToolPipeline(mode, object, w, h){
+      const steps = mode.name.includes("Tracker") ? ["视频帧","轨迹点","拟合模型","规律验证"] :
+        mode.name.includes("OpenModelica") ? ["方程组件","状态变量","求解器","工程响应"] :
+        mode.name.includes("SymPy") ? ["公式","变换","求解","解释"] :
+        mode.name.includes("CircuitJS") ? ["元件拓扑","电压/电流","波形","电路规律"] :
+        mode.name.includes("VPython") ? ["3D对象","力/速度","轨迹","空间规律"] :
+        mode.name.includes("CindyJS") ? ["几何对象","拖动约束","构造关系","公式"] :
+        mode.name.includes("JSXGraph") ? ["变量滑块","函数曲线","数据点","参数识别"] :
+        ["物理现象","可控变量","反馈动画","规律解释"];
+      const x0=26,y0=70,gap=8,bw=92,bh=18;
+      steps.forEach((s,i)=>{
+        const x=x0+i*(bw+gap);
+        ctx.fillStyle=i===steps.length-1?"rgba(255,193,7,.16)":"rgba(255,255,255,.06)";
+        ctx.strokeStyle=i===steps.length-1?"rgba(255,193,7,.42)":"rgba(0,229,255,.22)";
+        roundRectPath(x,y0,bw,bh,7);ctx.fill();ctx.stroke();
+        ctx.fillStyle=i===steps.length-1?"#FFC107":"#B0BEC5";
+        ctx.font="700 10px Microsoft YaHei";ctx.fillText(s,x+9,y0+13);
+        if(i<steps.length-1){ctx.fillStyle="#00E5FF";ctx.fillText("→",x+bw+1,y0+13);}
+      });
+    }
+    function drawEvidenceGraph(data, metrics, g){
+      const {x,y,w,h,X,Y,axis,mode}=g;
       ctx.strokeStyle="rgba(255,255,255,.12)";ctx.lineWidth=1;
-      for(let i=0;i<6;i++){const y=pad+i*(h-pad*1.7)/5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-pad/2,y);ctx.stroke();}
-      ctx.strokeStyle="#00E5FF";ctx.lineWidth=3;ctx.beginPath();data.forEach((p,i)=>{const x=X(p.x),y=Y(p.y);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y);});ctx.stroke();
-      ctx.fillStyle="#FFC107";data.forEach((p,i)=>{if(i%3)return;ctx.beginPath();ctx.arc(X(p.x),Y(p.y),3.4,0,Math.PI*2);ctx.fill();});
-      drawToolInspiredOverlay(law, metrics, {w,h,pad,minX,maxX,minY,maxY,X,Y,data});
+      for(let i=0;i<=5;i++){
+        const yy=y-i*h/5;ctx.beginPath();ctx.moveTo(x,yy);ctx.lineTo(x+w,yy);ctx.stroke();
+        const xx=x+i*w/5;ctx.beginPath();ctx.moveTo(xx,y);ctx.lineTo(xx,y-h);ctx.stroke();
+      }
+      ctx.strokeStyle="rgba(255,255,255,.38)";ctx.beginPath();ctx.moveTo(x,y-h);ctx.lineTo(x,y);ctx.lineTo(x+w,y);ctx.stroke();
+      const fit=linearFit(data);
+      const sorted=[...data].sort((a,b)=>a.x-b.x);
+      ctx.strokeStyle="rgba(255,193,7,.82)";ctx.lineWidth=2;ctx.setLineDash([6,5]);ctx.beginPath();
+      sorted.forEach((p,i)=>{const px=X(p.x),py=Y(fit.m*p.x+fit.b);i?ctx.lineTo(px,py):ctx.moveTo(px,py);});ctx.stroke();ctx.setLineDash([]);
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=3;ctx.beginPath();
+      sorted.forEach((p,i)=>{const px=X(p.x),py=Y(p.y);i?ctx.lineTo(px,py):ctx.moveTo(px,py);});ctx.stroke();
+      ctx.fillStyle="#FFC107";
+      sorted.forEach((p,i)=>{if(i%4)return;ctx.beginPath();ctx.arc(X(p.x),Y(p.y),3.2,0,Math.PI*2);ctx.fill();});
+      ctx.fillStyle="#B0BEC5";ctx.font="500 11px Microsoft YaHei";ctx.fillText(axis.x,x,y+26);
+      ctx.save();ctx.translate(x-24,y-6);ctx.rotate(-Math.PI/2);ctx.fillText(axis.y,0,0);ctx.restore();
+      ctx.fillStyle="#FFC107";ctx.font="700 11px Microsoft YaHei";ctx.fillText("模型曲线",x+w-82,y-h+22);
+      ctx.fillStyle="#00E5FF";ctx.fillText("观测数据",x+w-82,y-h+40);
+      drawResidualMini(data, fit, x+w-150, y-62, 126, 42);
+    }
+    function drawResidualMini(data, fit, x, y, w, h){
+      ctx.fillStyle="rgba(255,193,7,.08)";ctx.strokeStyle="rgba(255,193,7,.28)";
+      roundRectPath(x,y,w,h,8);ctx.fill();ctx.stroke();
+      ctx.fillStyle="#FFC107";ctx.font="700 9px Microsoft YaHei";ctx.fillText("残差",x+8,y+13);
+      ctx.strokeStyle="rgba(255,255,255,.18)";ctx.beginPath();ctx.moveTo(x+8,y+25);ctx.lineTo(x+w-8,y+25);ctx.stroke();
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=1.2;ctx.beginPath();
+      data.filter((_,i)=>i%9===0).forEach((p,i)=>{const r=p.y-(fit.m*p.x+fit.b);const px=x+18+i*14,py=y+25-Math.max(-12,Math.min(12,r*7));i?ctx.lineTo(px,py):ctx.moveTo(px,py);});
+      ctx.stroke();
+    }
+    function drawInsightStrip(law, mode, metrics, axis, box){
+      const cards=[
+        ["对象", physicalObjectOf(law)],
+        ["横轴", axis.x],
+        ["纵轴", axis.y],
+        ["工具范式", mode.name],
+        [metrics[0]?.[0] || "识别结果", metrics[0]?.[1] || "已生成"]
+      ];
+      const gap=8,cw=(box.w-28-gap*4)/5;
+      cards.forEach((c,i)=>{
+        const x=box.x+14+i*(cw+gap),y=box.y+34;
+        ctx.fillStyle="rgba(0,229,255,.06)";ctx.strokeStyle="rgba(0,229,255,.18)";
+        roundRectPath(x,y,cw,42,8);ctx.fill();ctx.stroke();
+        ctx.fillStyle="#00E5FF";ctx.font="800 10px Microsoft YaHei";ctx.fillText(c[0],x+8,y+15);
+        ctx.fillStyle=i===4?"#FFC107":"#EAFBFF";ctx.font="700 10px Microsoft YaHei";
+        const text=String(c[1]);
+        ctx.fillText(text.length>18?text.slice(0,17)+"…":text,x+8,y+32);
+      });
+    }
+    function drawScenarioScene(law, mode, box){
+      const n=law.name,x=box.x+18,y=box.y+36,w=box.w-36,h=box.h-54;
+      const name=mode.name;
+      if(name.includes("CircuitJS")) return drawCircuitScene(x,y,w,h);
+      if(name.includes("VPython")) return draw3DScene(n,x,y,w,h);
+      if(name.includes("CindyJS")) return drawGeometryScene(n,x,y,w,h);
+      if(name.includes("SymPy")) return drawSymbolicScene(n,x,y,w,h);
+      if(name.includes("SageMath")) return drawMathSystemScene(n,x,y,w,h);
+      if(name.includes("Scilab") || name.includes("OpenModelica")) return drawEngineeringScene(n,x,y,w,h);
+      if(name.includes("Tracker")) return drawTrackerScene(n,x,y,w,h);
+      if(name.includes("JSXGraph")) return drawInteractiveGraphScene(n,x,y,w,h);
+      return drawPhETScene(n,x,y,w,h);
+    }
+    function drawCircuitScene(x,y,w,h){
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(x+24,y+h*.55);ctx.lineTo(x+74,y+h*.55);ctx.rect(x+74,y+h*.42,62,34);ctx.moveTo(x+136,y+h*.55);ctx.lineTo(x+w-34,y+h*.55);ctx.lineTo(x+w-34,y+h*.25);ctx.lineTo(x+24,y+h*.25);ctx.lineTo(x+24,y+h*.55);ctx.stroke();
+      const vg=ctx.createLinearGradient(x+24,y,x+w-34,y);vg.addColorStop(0,"#FF5252");vg.addColorStop(1,"#00E5FF");ctx.strokeStyle=vg;ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x+24,y+h*.25);ctx.lineTo(x+w-34,y+h*.25);ctx.stroke();
+      ctx.fillStyle="#4CAF50";for(let i=0;i<5;i++){ctx.beginPath();ctx.arc(x+50+i*36,y+h*.55,3.5,0,Math.PI*2);ctx.fill();}
+      ctx.fillStyle="#FFC107";ctx.font="800 14px Consolas";ctx.fillText("V = IR",x+82,y+h*.52);
+    }
+    function draw3DScene(n,x,y,w,h){
+      ctx.strokeStyle="rgba(255,255,255,.24)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x+30,y+h-32);ctx.lineTo(x+w-28,y+h-62);ctx.moveTo(x+30,y+h-32);ctx.lineTo(x+52,y+26);ctx.moveTo(x+30,y+h-32);ctx.lineTo(x+142,y+h-10);ctx.stroke();
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(x+w*.52,y+h*.50,w*.30,h*.20,-.25,0,Math.PI*2);ctx.stroke();
+      ctx.fillStyle="#FFC107";ctx.beginPath();ctx.arc(x+w*.47,y+h*.50,18,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="#4CAF50";ctx.beginPath();ctx.arc(x+w*.72,y+h*.36,8,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle="rgba(76,175,80,.45)";ctx.beginPath();ctx.moveTo(x+w*.72,y+h*.36);ctx.quadraticCurveTo(x+w*.62,y+h*.20,x+w*.44,y+h*.32);ctx.stroke();
+      ctx.fillStyle="#B0BEC5";ctx.font="700 11px Microsoft YaHei";ctx.fillText("空间轨迹 / WebGL 视角",x+42,y+h-12);
+    }
+    function drawGeometryScene(n,x,y,w,h){
+      ctx.strokeStyle="rgba(255,255,255,.18)";ctx.lineWidth=1;for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(x+20+i*w/5,y+18);ctx.lineTo(x+20+i*w/5,y+h-18);ctx.stroke();}
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+28,y+h*.70);ctx.lineTo(x+w*.50,y+h*.42);ctx.lineTo(x+w-28,y+h*.62);ctx.stroke();
+      ctx.strokeStyle="#FFC107";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+w*.50,y+22);ctx.lineTo(x+w*.50,y+h-20);ctx.stroke();
+      ctx.fillStyle="#4CAF50";[[.28,.70],[.50,.42],[.78,.62]].forEach(p=>{ctx.beginPath();ctx.arc(x+w*p[0],y+h*p[1],6,0,Math.PI*2);ctx.fill();});
+      ctx.fillStyle="#B0BEC5";ctx.font="700 11px Microsoft YaHei";ctx.fillText("拖动点保持几何约束",x+48,y+h-10);
+    }
+    function drawSymbolicScene(n,x,y,w,h){
+      const nodes=[["公式",x+22,y+28],["变换",x+w*.38,y+h*.36],["求解",x+w*.66,y+34],["解释",x+w*.62,y+h*.72]];
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(nodes[0][1]+48,nodes[0][2]+10);ctx.lineTo(nodes[1][1],nodes[1][2]);ctx.lineTo(nodes[2][1],nodes[2][2]);ctx.moveTo(nodes[1][1]+42,nodes[1][2]+14);ctx.lineTo(nodes[3][1],nodes[3][2]);ctx.stroke();
+      nodes.forEach(([t,nx,ny],i)=>{ctx.fillStyle=i===3?"rgba(255,193,7,.14)":"rgba(0,229,255,.10)";ctx.strokeStyle=i===3?"rgba(255,193,7,.42)":"rgba(0,229,255,.35)";roundRectPath(nx,ny,64,30,8);ctx.fill();ctx.stroke();ctx.fillStyle=i===3?"#FFC107":"#00E5FF";ctx.font="800 12px Microsoft YaHei";ctx.fillText(t,nx+13,ny+20);});
+      ctx.fillStyle="#B0BEC5";ctx.font="700 11px Consolas";ctx.fillText("d/dx · solve · simplify",x+40,y+h-14);
+    }
+    function drawMathSystemScene(n,x,y,w,h){
+      ctx.strokeStyle="rgba(0,229,255,.36)";ctx.lineWidth=1;for(let i=0;i<6;i++){ctx.strokeRect(x+34+i*26,y+28+i*8,20,20);}
+      ctx.strokeStyle="#FFC107";ctx.lineWidth=2;ctx.beginPath();for(let i=0;i<120;i++){const px=x+34+i*1.55,py=y+h*.65+24*Math.sin(i/16)*Math.exp(-i/180);i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.stroke();
+      ctx.fillStyle="#00E5FF";ctx.font="800 13px Microsoft YaHei";ctx.fillText("代数结构 + 数值扫描",x+48,y+28);
+    }
+    function drawEngineeringScene(n,x,y,w,h){
+      const boxes=[["源",.08,.28],["模型",.38,.18],["求解器",.66,.32],["响应",.38,.68]];
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(x+w*.20,y+h*.36);ctx.lineTo(x+w*.38,y+h*.25);ctx.lineTo(x+w*.66,y+h*.39);ctx.moveTo(x+w*.66,y+h*.45);ctx.lineTo(x+w*.50,y+h*.70);ctx.lineTo(x+w*.20,y+h*.36);ctx.stroke();
+      boxes.forEach(([t,px,py],i)=>{ctx.fillStyle=i===2?"rgba(255,193,7,.14)":"rgba(0,229,255,.10)";ctx.strokeStyle=i===2?"rgba(255,193,7,.42)":"rgba(0,229,255,.34)";roundRectPath(x+w*px,y+h*py,72,34,8);ctx.fill();ctx.stroke();ctx.fillStyle=i===2?"#FFC107":"#00E5FF";ctx.font="800 11px Microsoft YaHei";ctx.fillText(t,x+w*px+14,y+h*py+22);});
+      ctx.fillStyle="#B0BEC5";ctx.font="700 10px Microsoft YaHei";ctx.fillText("热-流-电-机-控耦合",x+60,y+h-12);
+    }
+    function drawTrackerScene(n,x,y,w,h){
+      ctx.fillStyle="rgba(255,255,255,.06)";ctx.fillRect(x+18,y+24,w-36,h-46);
+      ctx.strokeStyle="rgba(255,255,255,.12)";for(let i=0;i<6;i++){ctx.beginPath();ctx.moveTo(x+18,y+24+i*(h-46)/5);ctx.lineTo(x+w-18,y+24+i*(h-46)/5);ctx.stroke();}
+      ctx.strokeStyle="#FFC107";ctx.lineWidth=2;ctx.beginPath();for(let i=0;i<18;i++){const px=x+32+i*(w-64)/17,py=y+h-42-.018*(i*i)*(h-54);i?ctx.lineTo(px,py):ctx.moveTo(px,py);ctx.fillStyle="#00E5FF";ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill();}ctx.stroke();
+      ctx.fillStyle="#B0BEC5";ctx.font="700 11px Microsoft YaHei";ctx.fillText("视频帧 → 轨迹点 → 拟合",x+46,y+h-12);
+    }
+    function drawInteractiveGraphScene(n,x,y,w,h){
+      ctx.strokeStyle="rgba(255,255,255,.20)";ctx.beginPath();ctx.moveTo(x+34,y+h-36);ctx.lineTo(x+w-28,y+h-36);ctx.moveTo(x+34,y+24);ctx.lineTo(x+34,y+h-36);ctx.stroke();
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=2.5;ctx.beginPath();for(let i=0;i<150;i++){const px=x+34+i*(w-70)/149, t=i/149, py=y+h-36-(Math.pow(t,1.7))*(h-68);i?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.stroke();
+      [["参数A",.26],["噪声",.58]].forEach(([t,pos],i)=>{const sx=x+56,sy=y+34+i*30;ctx.fillStyle="#B0BEC5";ctx.font="700 10px Microsoft YaHei";ctx.fillText(t,sx,sy);ctx.strokeStyle="#64748B";ctx.beginPath();ctx.moveTo(sx+50,sy-4);ctx.lineTo(sx+150,sy-4);ctx.stroke();ctx.fillStyle="#FFC107";ctx.beginPath();ctx.arc(sx+50+100*pos,sy-4,5,0,Math.PI*2);ctx.fill();});
+      ctx.fillStyle="#B0BEC5";ctx.font="700 11px Microsoft YaHei";ctx.fillText("滑块驱动函数曲线",x+58,y+h-10);
+    }
+    function drawPhETScene(n,x,y,w,h){
+      ctx.fillStyle="rgba(0,229,255,.08)";ctx.strokeStyle="rgba(0,229,255,.3)";roundRectPath(x+28,y+40,w-56,58,12);ctx.fill();ctx.stroke();
+      ctx.fillStyle="#FFC107";ctx.beginPath();ctx.arc(x+w*.34,y+70,15,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle="#00E5FF";ctx.fillRect(x+w*.52,y+55,48,30);
+      ctx.strokeStyle="#4CAF50";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+w*.52,y+70);ctx.lineTo(x+w*.34+18,y+70);ctx.stroke();
+      ctx.fillStyle="#B0BEC5";ctx.font="700 11px Microsoft YaHei";ctx.fillText("拖动变量，观察反馈",x+58,y+h-12);
     }
     function toolModeOf(law){
       const n = law.name, c = law.category || "";
