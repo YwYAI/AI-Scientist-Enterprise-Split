@@ -880,8 +880,23 @@
     function linearFit(d){const n=d.length,sx=d.reduce((s,p)=>s+p.x,0),sy=d.reduce((s,p)=>s+p.y,0),sxx=d.reduce((s,p)=>s+p.x*p.x,0),sxy=d.reduce((s,p)=>s+p.x*p.y,0);const m=(n*sxy-sx*sy)/(n*sxx-sx*sx);return {m,b:(sy-m*sx)/n};}
     function quadFit(d){const n=d.length,sx=d.reduce((s,p)=>s+p.x,0),s2=d.reduce((s,p)=>s+p.x*p.x,0),s3=d.reduce((s,p)=>s+p.x**3,0),s4=d.reduce((s,p)=>s+p.x**4,0),sy=d.reduce((s,p)=>s+p.y,0),sxy=d.reduce((s,p)=>s+p.x*p.y,0),sx2y=d.reduce((s,p)=>s+p.x*p.x*p.y,0);const det=n*(s2*s4-s3*s3)-sx*(sx*s4-s2*s3)+s2*(sx*s3-s2*s2);const a=(n*(s2*sx2y-s3*sxy)-sx*(sx*sx2y-s2*sy)+s2*(sx*sxy-s2*sy))/det;return {a};}
     function estimatePeriod(d){const peaks=[];for(let i=1;i<d.length-1;i++) if(d[i].y>d[i-1].y&&d[i].y>d[i+1].y) peaks.push(d[i].x);return peaks.length>1?(peaks[peaks.length-1]-peaks[0])/(peaks.length-1):3.6;}
+    function prepareLabCanvas(){
+      const rect = canvas.getBoundingClientRect();
+      const cssW = Math.max(1, Math.round(rect.width || canvas.clientWidth || 880));
+      const cssH = Math.max(1, Math.round(rect.height || canvas.clientHeight || 520));
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      const targetW = Math.round(cssW * dpr);
+      const targetH = Math.round(cssH * dpr);
+      if(canvas.width !== targetW || canvas.height !== targetH){
+        canvas.width = targetW;
+        canvas.height = targetH;
+      }
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.imageSmoothingEnabled = true;
+      return {w:cssW,h:cssH,dpr};
+    }
     function draw(data, law, metrics){
-      const w=canvas.width,h=canvas.height,pad=48;
+      const {w,h}=prepareLabCanvas();
       ctx.clearRect(0,0,w,h);
       const mode = toolModeOf(law);
       const axis = axisInfoOf(law);
@@ -1149,7 +1164,7 @@
       }
     }
     function drawPMA(data){
-      const w=canvas.width,h=canvas.height;
+      const {w,h}=prepareLabCanvas();
       ctx.clearRect(0,0,w,h);
       ctx.fillStyle="#061024";ctx.fillRect(0,0,w,h);
       const sphere = (x,y,r,hot=false) => {
@@ -1533,6 +1548,18 @@
         render();
       });
       syncLawDropdowns();
+    }
+    if("ResizeObserver" in window){
+      let resizeQueued = false;
+      const resizeObserver = new ResizeObserver(() => {
+        if(resizeQueued) return;
+        resizeQueued = true;
+        requestAnimationFrame(() => {
+          resizeQueued = false;
+          render();
+        });
+      });
+      resizeObserver.observe(canvas);
     }
     $$("#lawControls input").forEach(input => input.addEventListener("input", render));
     $("#lawRegenerate")?.addEventListener("click", render);
