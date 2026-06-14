@@ -120,6 +120,9 @@ https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 | Paul Falstad GitHub | https://github.com/pfalstad | Falstad 电路仿真和其他物理可视化项目来源 |
 | JSXGraph | https://github.com/jsxgraph/jsxgraph | 网页交互几何、函数绘图、图表和数据可视化，适合物理公式曲线、变量滑块和交互图表 |
 | CindyJS | https://github.com/CindyJS/CindyJS | 网页交互数学框架，适合几何构造、数学关系和物理可视化 |
+| SageMath | https://github.com/sagemath/sage | 综合数学系统，适合符号计算、数值计算、建模和可视化 |
+| SymPy | https://github.com/sympy/sympy | Python 符号计算库，适合公式推导、方程求解、微积分和物理公式计算 |
+| Scilab GitLab | https://gitlab.com/scilab/scilab | 工程数值计算、控制系统和科学计算 |
 | VPython Jupyter | https://github.com/vpython/vpython-jupyter | 在 Jupyter / 浏览器中运行 VPython，生成可导航 3D 物理动画 |
 | GlowScript / Web VPython | https://github.com/vpython/glowscript | Web 版 VPython，用 WebGL 生成可导航实时 3D 动画 |
 | VPython 组织页 | https://github.com/vpython | VPython 相关项目集合 |
@@ -129,7 +132,7 @@ https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 | OMPython | https://github.com/OpenModelica/OMPython | Python 调用 OpenModelica 的接口，适合脚本化建模、编译、仿真与参数实验 |
 | OpenModelica 官网 | https://openmodelica.org/ | 方程驱动、多物理系统、状态变量与求解器语义 |
 
-因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`CircuitJS-style`、`JSXGraph-style`、`CindyJS-style`、`VPython-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。其中 `CircuitJS-style` 主要借鉴 Falstad / CircuitJS1 的浏览器电路仿真表达，强调元件拓扑、电压颜色和电流流动；`JSXGraph-style` 主要借鉴交互函数图表、变量滑块和数据可视化；`CindyJS-style` 主要借鉴动态几何构造和可拖动约束关系；`VPython-style` 主要借鉴 GlowScript / Web VPython 的浏览器 3D、WebGL、可导航实时动画表达；`OpenModelica-style` 主要借鉴工程级多物理系统建模，强调 DAE/ODE 求解、状态变量和热-流-电-机-控制系统耦合。
+因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`CircuitJS-style`、`JSXGraph-style`、`CindyJS-style`、`SymPy-style`、`SageMath-style`、`Scilab-style`、`VPython-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。其中 `CircuitJS-style` 主要借鉴 Falstad / CircuitJS1 的浏览器电路仿真表达，强调元件拓扑、电压颜色和电流流动；`JSXGraph-style` 主要借鉴交互函数图表、变量滑块和数据可视化；`CindyJS-style` 主要借鉴动态几何构造和可拖动约束关系；`SymPy-style` 主要借鉴符号表达式、方程变换和解析关系；`SageMath-style` 主要借鉴综合数学建模、代数结构、数值计算和可视化；`Scilab-style` 主要借鉴工程数值计算、控制系统和科学计算；`VPython-style` 主要借鉴 GlowScript / Web VPython 的浏览器 3D、WebGL、可导航实时动画表达；`OpenModelica-style` 主要借鉴工程级多物理系统建模，强调 DAE/ODE 求解、状态变量和热-流-电-机-控制系统耦合。
 
 ## 本地运行
 
