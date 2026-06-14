@@ -108,6 +108,17 @@ https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 
 第24章“物理规律发现实验室”的图例表达参考了多个成熟物理教育与仿真工具的设计思想，但本项目没有直接引入这些项目源码，也不依赖它们运行。
 
+工具范式分层：
+
+| 层级 | 参考工具 | 在本项目中的作用 |
+| --- | --- | --- |
+| 前端交互 | JSXGraph / CindyJS | 函数曲线、变量滑块、动态几何和交互图表 |
+| 物理实验演示 | PhET 思路参考 | 概念探索、参数反馈、教学级互动演示 |
+| 真实视频分析 | Tracker | 观测点、实验轨迹、模型曲线和残差检查 |
+| 3D 动画 | VPython / Three.js | 空间对象、轨迹运动、WebGL 实时可视化 |
+| 公式推导 | SymPy | 符号表达式、方程变换、解析关系 |
+| 工程系统仿真 | OpenModelica | 多物理系统、DAE/ODE 求解、状态变量和工程耦合 |
+
 核心参考工具：
 
 | 工具 | 源码 / 项目地址 | 主要参考方向 |
@@ -144,7 +155,7 @@ https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 | OMPython | https://github.com/OpenModelica/OMPython | Python 调用 OpenModelica 的接口，适合脚本化建模、编译、仿真与参数实验 |
 | OpenModelica 官网 | https://openmodelica.org/ | 方程驱动、多物理系统、状态变量与求解器语义 |
 
-因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`CircuitJS-style`、`JSXGraph-style`、`CindyJS-style`、`SymPy-style`、`SageMath-style`、`Scilab-style`、`VPython-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。其中 `CircuitJS-style` 主要借鉴 Falstad / CircuitJS1 的浏览器电路仿真表达，强调元件拓扑、电压颜色和电流流动；`JSXGraph-style` 主要借鉴交互函数图表、变量滑块和数据可视化；`CindyJS-style` 主要借鉴动态几何构造和可拖动约束关系；`SymPy-style` 主要借鉴符号表达式、方程变换和解析关系；`SageMath-style` 主要借鉴综合数学建模、代数结构、数值计算和可视化；`Scilab-style` 主要借鉴工程数值计算、控制系统和科学计算；`VPython-style` 主要借鉴 GlowScript / Web VPython 的浏览器 3D、WebGL、可导航实时动画表达；`OpenModelica-style` 主要借鉴工程级多物理系统建模，强调 DAE/ODE 求解、状态变量和热-流-电-机-控制系统耦合。
+因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`CircuitJS-style`、`JSXGraph-style`、`CindyJS-style`、`SymPy-style`、`SageMath-style`、`Scilab-style`、`VPython/Three.js-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。其中 `CircuitJS-style` 主要借鉴 Falstad / CircuitJS1 的浏览器电路仿真表达，强调元件拓扑、电压颜色和电流流动；`JSXGraph-style` 主要借鉴交互函数图表、变量滑块和数据可视化；`CindyJS-style` 主要借鉴动态几何构造和可拖动约束关系；`SymPy-style` 主要借鉴符号表达式、方程变换和解析关系；`SageMath-style` 主要借鉴综合数学建模、代数结构、数值计算和可视化；`Scilab-style` 主要借鉴工程数值计算、控制系统和科学计算；`VPython/Three.js-style` 主要借鉴浏览器 3D、WebGL、空间对象、轨迹运动和可导航实时动画表达；`OpenModelica-style` 主要借鉴工程级多物理系统建模，强调 DAE/ODE 求解、状态变量和热-流-电-机-控制系统耦合。
 
 ## 本地运行
 

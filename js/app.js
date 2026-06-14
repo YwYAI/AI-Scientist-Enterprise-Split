@@ -859,7 +859,7 @@
       if(/爱因斯坦|测地线|史瓦西|弗里德曼|麦克斯韦/.test(n)) return {name:"OpenModelica-style", tag:"多物理方程系统", note:"DAE/ODE求解 + 状态变量 + 工程耦合"};
       if(/斯涅尔|马吕斯|透镜|光栅|干涉|布拉格|康普顿|抛体|平抛|几何/.test(n)) return {name:"CindyJS-style", tag:"交互几何", note:"几何构造 + 可拖动点 + 约束关系"};
       if(/匀速|加速度|匀变速|速度位移|自由落体|扩散|冷却|衰变|光电|普朗克|德布罗意|热传导|理想气体|线膨胀|动能|势能|功率|反平方/.test(n)) return {name:"JSXGraph-style", tag:"函数图表", note:"变量滑块 + 函数曲线 + 数据可视化"};
-      if(/行星|环绕|开普勒|抛体|向心|单摆|转动|角动量|刚体|洛伦兹|回旋|波速|多普勒|弦振动/.test(n)) return {name:"VPython-style", tag:"浏览器3D动画", note:"WebGL对象 + 轨迹 + 可导航实时变量"};
+      if(/行星|环绕|开普勒|抛体|向心|单摆|转动|角动量|刚体|洛伦兹|回旋|波速|多普勒|弦振动/.test(n)) return {name:"VPython/Three.js-style", tag:"浏览器3D动画", note:"WebGL对象 + 轨迹 + 可导航实时变量"};
       if(/数据|实验|测量/.test(n)) return {name:"Tracker-style", tag:"实验分析", note:"观测点 + 模型曲线 + 残差"};
       if(/欧姆|电阻|电容|RC|变压器|电功率|基尔霍夫|二极管|运放|电路/.test(n)) return {name:"CircuitJS-style", tag:"浏览器电路仿真", note:"元件拓扑 + 电压颜色 + 电流流动"};
       if(/电场|库仑|安培|法拉第|磁|电势|洛伦兹|霍尔|麦克斯韦/.test(n)) return {name:"OSP/EJS-style", tag:"可编程模型", note:"参数控件 + 可检查模型结构"};
