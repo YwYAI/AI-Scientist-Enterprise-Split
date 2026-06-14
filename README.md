@@ -108,6 +108,18 @@ https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 
 第24章“物理规律发现实验室”的图例表达参考了多个成熟物理教育与仿真工具的设计思想，但本项目没有直接引入这些项目源码，也不依赖它们运行。
 
+核心参考工具：
+
+| 工具 | 源码 / 项目地址 | 主要参考方向 |
+| --- | --- | --- |
+| PhET | https://github.com/phetsims | 教学级互动仿真、参数探索、即时反馈 |
+| Tracker | https://github.com/OpenSourcePhysics/tracker | 真实实验视频/轨迹分析、观测点与模型对照 |
+| Open Source Physics | https://github.com/OpenSourcePhysics | 物理教育开源生态、可检查的计算模型 |
+| VPython | https://github.com/vpython/vpython-jupyter | 浏览器/Jupyter 3D 物理动画、轨迹和空间对象 |
+| OpenModelica | https://github.com/OpenModelica/OpenModelica | 工程级多物理系统建模、仿真和求解器语义 |
+
+扩展参考工具：
+
 | 工具 | 源码 / 项目地址 | 本项目借鉴的表达方式 |
 | --- | --- | --- |
 | PhET | https://github.com/phetsims | 面向教学的概念探索、参数拖动、即时因果反馈 |
