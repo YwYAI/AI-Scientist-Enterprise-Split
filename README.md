@@ -104,6 +104,23 @@ https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 - CDN
 - 后端服务
 
+## 物理仿真工具学习来源
+
+第24章“物理规律发现实验室”的图例表达参考了多个成熟物理教育与仿真工具的设计思想，但本项目没有直接引入这些项目源码，也不依赖它们运行。
+
+| 工具 | 源码 / 项目地址 | 本项目借鉴的表达方式 |
+| --- | --- | --- |
+| PhET | https://github.com/phetsims | 面向教学的概念探索、参数拖动、即时因果反馈 |
+| Open Source Physics / OSP | https://github.com/OpenSourcePhysics | 物理教育开源生态、可检查的计算模型结构 |
+| Tracker | https://github.com/OpenSourcePhysics/tracker | 真实实验轨迹分析、观测点、模型曲线、残差检查 |
+| OSP Core | https://github.com/OpenSourcePhysics/osp | OSP 核心库思想，支撑物理建模与工具复用 |
+| EJS / OSP EJS | https://github.com/OpenSourcePhysics/osp_ejs | 交互式物理仿真课件的模型-变量-视图组织方式 |
+| EjsS | https://gitlab.com/ejsS | HTML / JavaScript 科学仿真课件生成思路 |
+| VPython | https://vpython.org/ | 三维物理对象、运动轨迹、实时变量可视化 |
+| OpenModelica | https://openmodelica.org/ | 方程驱动、多物理系统、状态变量与求解器语义 |
+
+因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`VPython-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。
+
 ## 本地运行
 
 直接双击打开：
