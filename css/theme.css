@@ -780,6 +780,13 @@ p{margin:0}
   background:rgba(255,193,7,.06);
 }
 .formula-legend.dynamic .scope b{color:var(--amber)}
+.formula-legend.dynamic .tool-source{
+  border-color:rgba(76,175,80,.34);
+  background:linear-gradient(135deg,rgba(76,175,80,.11),rgba(0,229,255,.045));
+}
+.formula-legend.dynamic .tool-source b{color:var(--green)}
+.formula-legend.dynamic .tool-source small{color:#d7f7dc}
+.formula-legend.dynamic .tool-source em{color:var(--muted)}
 .formula-legend.dynamic .law-identity{
   border-color:rgba(0,229,255,.42);
   background:linear-gradient(180deg,rgba(0,229,255,.12),rgba(255,255,255,.04));

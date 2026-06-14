@@ -838,7 +838,7 @@
     function linearFit(d){const n=d.length,sx=d.reduce((s,p)=>s+p.x,0),sy=d.reduce((s,p)=>s+p.y,0),sxx=d.reduce((s,p)=>s+p.x*p.x,0),sxy=d.reduce((s,p)=>s+p.x*p.y,0);const m=(n*sxy-sx*sy)/(n*sxx-sx*sx);return {m,b:(sy-m*sx)/n};}
     function quadFit(d){const n=d.length,sx=d.reduce((s,p)=>s+p.x,0),s2=d.reduce((s,p)=>s+p.x*p.x,0),s3=d.reduce((s,p)=>s+p.x**3,0),s4=d.reduce((s,p)=>s+p.x**4,0),sy=d.reduce((s,p)=>s+p.y,0),sxy=d.reduce((s,p)=>s+p.x*p.y,0),sx2y=d.reduce((s,p)=>s+p.x*p.x*p.y,0);const det=n*(s2*s4-s3*s3)-sx*(sx*s4-s2*s3)+s2*(sx*s3-s2*s2);const a=(n*(s2*sx2y-s3*sxy)-sx*(sx*sx2y-s2*sy)+s2*(sx*sxy-s2*sy))/det;return {a};}
     function estimatePeriod(d){const peaks=[];for(let i=1;i<d.length-1;i++) if(d[i].y>d[i-1].y&&d[i].y>d[i+1].y) peaks.push(d[i].x);return peaks.length>1?(peaks[peaks.length-1]-peaks[0])/(peaks.length-1):3.6;}
-    function draw(data){
+    function draw(data, law, metrics){
       const w=canvas.width,h=canvas.height,pad=48;
       ctx.clearRect(0,0,w,h);
       ctx.fillStyle="#071126";ctx.fillRect(0,0,w,h);
@@ -849,6 +849,80 @@
       for(let i=0;i<6;i++){const y=pad+i*(h-pad*1.7)/5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-pad/2,y);ctx.stroke();}
       ctx.strokeStyle="#00E5FF";ctx.lineWidth=3;ctx.beginPath();data.forEach((p,i)=>{const x=X(p.x),y=Y(p.y);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y);});ctx.stroke();
       ctx.fillStyle="#FFC107";data.forEach((p,i)=>{if(i%3)return;ctx.beginPath();ctx.arc(X(p.x),Y(p.y),3.4,0,Math.PI*2);ctx.fill();});
+      drawToolInspiredOverlay(law, metrics, {w,h,pad,minX,maxX,minY,maxY,X,Y,data});
+    }
+    function toolModeOf(law){
+      const n = law.name, c = law.category || "";
+      if(/QED|狄拉克|路径积分|标准模型|希格斯|爱因斯坦|测地线|史瓦西|弗里德曼|Polyakov|AdS|圈量子|热力学基本|拉格朗日|哈密顿|最小作用量|麦克斯韦/.test(n)) return {name:"OpenModelica", tag:"方程驱动", note:"控制方程 + 状态变量 + 求解关系"};
+      if(/行星|环绕|开普勒|抛体|向心|单摆|转动|角动量|刚体|洛伦兹|回旋|波速|多普勒|弦振动/.test(n)) return {name:"VPython", tag:"空间运动", note:"物理对象 + 轨迹 + 实时变量"};
+      if(/匀速|加速度|自由落体|数据|扩散|冷却|衰变|光电|布拉格|马吕斯|斯涅尔|康普顿|普朗克|德布罗意/.test(n)) return {name:"Tracker", tag:"实验分析", note:"观测点 + 模型曲线 + 残差"};
+      if(/欧姆|电阻|电容|RC|变压器|电功率|电场|库仑|安培|法拉第|磁|电势/.test(n)) return {name:"OSP/EJS", tag:"可编程模型", note:"参数控件 + 可检查模型结构"};
+      if(/热|气体|流体|伯努利|泊肃叶|斯托克斯|毛细|浮力|摩擦|功|能|动量|胡克/.test(n) || c.includes("运动学")) return {name:"PhET", tag:"概念探索", note:"可拖动参数 + 因果反馈"};
+      return {name:"OSP/EJS", tag:"建模探索", note:"变量映射 + 模型曲线"};
+    }
+    function drawToolInspiredOverlay(law, metrics, view){
+      if(!law) return;
+      const {w,h,pad,minX,maxX,minY,maxY,X,Y,data} = view;
+      const axis = axisInfoOf(law);
+      const mode = toolModeOf(law);
+      ctx.save();
+      ctx.font="700 12px Microsoft YaHei";
+      ctx.fillStyle="rgba(0,229,255,.10)";
+      ctx.strokeStyle="rgba(0,229,255,.42)";
+      ctx.lineWidth=1;
+      roundRectPath(18,16,210,56,8);ctx.fill();ctx.stroke();
+      ctx.fillStyle="#00E5FF";ctx.fillText(mode.name + " · " + mode.tag,30,38);
+      ctx.fillStyle="#B0BEC5";ctx.font="500 11px Microsoft YaHei";ctx.fillText(mode.note,30,58);
+      ctx.fillStyle="#B0BEC5";ctx.font="500 12px Microsoft YaHei";
+      ctx.fillText(axis.x, pad, h-13);
+      ctx.save();ctx.translate(16,h-pad);ctx.rotate(-Math.PI/2);ctx.fillText(axis.y,0,0);ctx.restore();
+      drawResidualProbe(data, X, Y, w, h);
+      drawMiniPhysicalScene(law, metrics, w-230, 22, 200, 112);
+      ctx.restore();
+    }
+    function roundRectPath(x,y,w,h,r){
+      ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+    }
+    function drawResidualProbe(data, X, Y, w, h){
+      if(data.length < 8) return;
+      const fit = linearFit(data);
+      const x0 = 28, y0 = h - 118;
+      ctx.fillStyle="rgba(255,193,7,.08)";ctx.strokeStyle="rgba(255,193,7,.32)";roundRectPath(x0,y0,170,74,8);ctx.fill();ctx.stroke();
+      ctx.fillStyle="#FFC107";ctx.font="700 11px Microsoft YaHei";ctx.fillText("Tracker 残差检查",x0+12,y0+20);
+      ctx.strokeStyle="rgba(255,255,255,.18)";ctx.beginPath();ctx.moveTo(x0+12,y0+45);ctx.lineTo(x0+158,y0+45);ctx.stroke();
+      ctx.strokeStyle="#00E5FF";ctx.lineWidth=1.4;ctx.beginPath();
+      data.filter((_,i)=>i%8===0).forEach((p,i)=>{
+        const residual = p.y - (fit.m*p.x + fit.b);
+        const px = x0+16+i*18, py = y0+45-Math.max(-18,Math.min(18,residual*10));
+        if(i) ctx.lineTo(px,py); else ctx.moveTo(px,py);
+      });
+      ctx.stroke();
+      ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("点越贴近中线，模型越可信",x0+12,y0+64);
+    }
+    function drawMiniPhysicalScene(law, metrics, x, y, bw, bh){
+      const n = law.name;
+      ctx.fillStyle="rgba(5,8,22,.82)";ctx.strokeStyle="rgba(0,229,255,.28)";ctx.lineWidth=1;roundRectPath(x,y,bw,bh,8);ctx.fill();ctx.stroke();
+      ctx.fillStyle="#FFFFFF";ctx.font="700 12px Microsoft YaHei";ctx.fillText(physicalObjectOf(law),x+12,y+20);
+      ctx.strokeStyle="#00E5FF";ctx.fillStyle="#00E5FF";ctx.lineWidth=2;
+      if(/弹簧|胡克|简谐|阻尼/.test(n)){
+        const baseY=y+68;ctx.strokeStyle="#B0BEC5";ctx.beginPath();ctx.moveTo(x+18,baseY);ctx.lineTo(x+55,baseY);ctx.stroke();
+        ctx.strokeStyle="#00E5FF";ctx.beginPath();ctx.moveTo(x+55,baseY);for(let i=0;i<8;i++){ctx.lineTo(x+62+i*9,baseY+(i%2?-10:10));}ctx.lineTo(x+140,baseY);ctx.stroke();
+        ctx.fillStyle="#FFC107";ctx.fillRect(x+140,baseY-18,34,36);ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("x ↔ F",x+82,y+98);
+      } else if(/单摆/.test(n)){
+        ctx.strokeStyle="#00E5FF";ctx.beginPath();ctx.moveTo(x+100,y+32);ctx.lineTo(x+130,y+82);ctx.stroke();ctx.fillStyle="#FFC107";ctx.beginPath();ctx.arc(x+130,y+82,13,0,Math.PI*2);ctx.fill();ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("L 决定 T",x+70,y+102);
+      } else if(/行星|开普勒|环绕|万有引力|反平方|重力/.test(n)){
+        ctx.fillStyle="#FFC107";ctx.beginPath();ctx.arc(x+86,y+64,17,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#00E5FF";ctx.beginPath();ctx.ellipse(x+102,y+64,66,30,-.25,0,Math.PI*2);ctx.stroke();ctx.fillStyle="#4CAF50";ctx.beginPath();ctx.arc(x+152,y+47,7,0,Math.PI*2);ctx.fill();ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("r 改变引力/周期",x+58,y+102);
+      } else if(/欧姆|电阻|电容|RC|电功率|变压器|基尔霍夫/.test(n)){
+        ctx.strokeStyle="#00E5FF";ctx.beginPath();ctx.moveTo(x+28,y+62);ctx.lineTo(x+62,y+62);ctx.rect(x+62,y+48,54,28);ctx.moveTo(x+116,y+62);ctx.lineTo(x+166,y+62);ctx.stroke();ctx.fillStyle="#FFC107";ctx.font="700 13px Consolas";ctx.fillText("I → V",x+76,y+68);ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("元件参数可调",x+66,y+100);
+      } else if(/波|多普勒|弦|声|马吕斯|斯涅尔|光栅|干涉|透镜/.test(n)){
+        ctx.strokeStyle="#00E5FF";ctx.beginPath();for(let i=0;i<140;i++){const px=x+30+i, py=y+66+18*Math.sin(i/14); if(i)ctx.lineTo(px,py); else ctx.moveTo(px,py);}ctx.stroke();ctx.fillStyle="#FFC107";ctx.beginPath();ctx.arc(x+146,y+66,8,0,Math.PI*2);ctx.fill();ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("相位/频率/角度驱动",x+52,y+100);
+      } else if(/热|气体|冷却|黑体|熵|配分/.test(n)){
+        const grad=ctx.createLinearGradient(x+42,y+82,x+158,y+34);grad.addColorStop(0,"#00E5FF");grad.addColorStop(1,"#FF5252");ctx.fillStyle=grad;ctx.fillRect(x+42,y+48,116,34);ctx.strokeStyle="rgba(255,255,255,.4)";ctx.strokeRect(x+42,y+48,116,34);ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("T / Q / S 状态变化",x+55,y+100);
+      } else if(/量子|薛定谔|光电|德布罗意|氢|对易|泡利|费米|玻色|QED|狄拉克|路径积分|标准模型|希格斯/.test(n)){
+        ctx.strokeStyle="#00E5FF";ctx.beginPath();for(let i=0;i<120;i++){const px=x+40+i, py=y+62+16*Math.sin(i/10)*Math.exp(-Math.abs(i-60)/80); if(i)ctx.lineTo(px,py); else ctx.moveTo(px,py);}ctx.stroke();ctx.fillStyle="#FFC107";ctx.font="700 13px Consolas";ctx.fillText("ψ / E",x+82,y+38);ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText("态、能级或场变量",x+62,y+100);
+      } else {
+        ctx.strokeStyle="#00E5FF";ctx.beginPath();ctx.moveTo(x+38,y+86);ctx.lineTo(x+76,y+42);ctx.lineTo(x+118,y+68);ctx.lineTo(x+164,y+34);ctx.stroke();ctx.fillStyle="#FFC107";ctx.font="700 13px Consolas";ctx.fillText("model → solve",x+54,y+100);
+      }
     }
     function drawPMA(data){
       const w=canvas.width,h=canvas.height;
@@ -1145,6 +1219,7 @@
     }
     function dynamicLegendHTML(law, metrics, data){
       const axis = axisInfoOf(law);
+      const mode = toolModeOf(law);
       const xs = data.map(p => p.x), ys = data.map(p => p.y);
       const metricText = metrics.map(([key, value]) => `${key} ${value}`);
       const spans = legendMeta(law).map(({symbol, desc}) => {
@@ -1153,6 +1228,7 @@
         return `<span><b>${esc(symbol)}</b><small>${esc(desc)}</small>${estimate}</span>`;
       });
       spans.unshift(`<span class="law-identity"><b>${esc(physicalObjectOf(law))}</b><small>${esc(law.formula)}</small><em>${esc(dynamicRelationText(law, metrics, data))}</em></span>`);
+      spans.unshift(`<span class="tool-source"><b>${esc(mode.name)}</b><small>${esc(mode.tag)}</small><em>${esc(mode.note)}</em></span>`);
       spans.unshift(`<span class="scope"><b>数据窗口</b><small>横轴 ${esc(axis.x)}：${fmt(Math.min(...xs))} ~ ${fmt(Math.max(...xs))}</small><small>纵轴 ${esc(axis.y)}：${fmt(Math.min(...ys))} ~ ${fmt(Math.max(...ys))}</small><em>参数强度 ${labState.yScale.toFixed(2)}x · 横轴尺度 ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`);
       return spans.join("");
     }
@@ -1169,7 +1245,7 @@
     function render(){
       syncLawControls();
       const law = laws[active], data = adjustedData(law.gen()), metrics = law.fit(data);
-      if(law.visual === "pma") drawPMA(data); else draw(data);
+      if(law.visual === "pma") drawPMA(data); else draw(data, law, metrics);
       $("#lawTitle").textContent = law.name;
       if(law.visual === "pma") $("#lawFormula").innerHTML = pmaEquationHTML(); else $("#lawFormula").textContent = law.formula;
       $("#lawFormula").classList.toggle("formula-tight", law.visual === "pma");
