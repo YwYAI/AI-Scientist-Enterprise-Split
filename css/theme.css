@@ -1730,6 +1730,36 @@ svg{max-width:100%;height:auto}
   align-content:start;
   align-self:start;
 }
+.lab-skill-strip{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-height:22px;
+  padding:0 2px 4px;
+  color:rgba(176,190,197,.72);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.lab-skill-strip span{
+  color:rgba(0,229,255,.82);
+  padding:2px 7px;
+  border:1px solid rgba(0,229,255,.18);
+  border-radius:999px;
+  background:rgba(0,229,255,.055);
+}
+.lab-skill-strip i{
+  color:rgba(255,193,7,.72);
+  font-style:normal;
+}
+.lab-skill-strip em{
+  margin-left:auto;
+  color:rgba(255,193,7,.82);
+  font-style:normal;
+}
 .law-select-stack{
   display:grid;
   grid-template-columns:minmax(190px,260px) minmax(360px,1fr) minmax(240px,340px);
@@ -1837,6 +1867,11 @@ svg{max-width:100%;height:auto}
 .physics-lab-chapter .formula-legend.dynamic b{font-size:12px}
 .physics-lab-chapter .formula-legend.dynamic small{font-size:11px;line-height:1.25}
 .physics-lab-chapter .formula-legend.dynamic em{font-size:11px;line-height:1.3}
+.physics-lab-chapter .formula-legend.dynamic .skill-route{
+  border-color:rgba(255,193,7,.28);
+  background:rgba(255,193,7,.07);
+}
+.physics-lab-chapter .formula-legend.dynamic .skill-route b{color:var(--amber)}
 .physics-lab-chapter .law-controls{gap:6px;margin:8px 0;padding:8px}
 .physics-lab-chapter .law-controls label{grid-template-columns:62px 1fr 46px;gap:8px;font-size:11px}
 .law-result .lead{font-size:18px;line-height:1.55;margin-top:14px}
@@ -2023,6 +2058,8 @@ body.presenter .chapter{min-height:100vh}
     grid-template-columns:minmax(170px,230px) minmax(320px,1fr) minmax(220px,300px);
     gap:10px;
   }
+  .lab-skill-strip{font-size:9px;gap:5px}
+  .lab-skill-strip span{padding:2px 5px}
   .physics-lab-chapter #lawCanvas{min-height:0}
   .physics-lab-chapter .law-result .formula{font-size:19px;padding:9px}
   .physics-lab-chapter .formula-legend.dynamic small,
@@ -2158,6 +2195,7 @@ body.presenter .chapter{min-height:100vh}
     grid-template-columns:minmax(160px,215px) minmax(300px,1fr) minmax(200px,280px);
     gap:8px;
   }
+  .lab-skill-strip{display:none}
   .physics-lab-chapter #lawCanvas{min-height:0}
   .physics-lab-chapter .law-menu{gap:6px;padding:8px}
   .physics-lab-chapter .law-group{gap:5px;padding-bottom:6px;margin-bottom:6px}

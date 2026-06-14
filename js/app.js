@@ -664,6 +664,17 @@
     if(!canvas || !menu) return;
     const ctx = canvas.getContext("2d");
     let active = 0;
+    const physicsAgentBrief = {
+      workflow:["normalize","route","generation brief","validate-output"],
+      classification:"web_app · conceptual_demo · frontend",
+      boundaryShort:"前端展示层",
+      boundary:"本页为浏览器端教学/解释层，不替代 CFD/FEM/多物理场等工程求解器。",
+      toolchain:{
+        frontend:["Canvas","CSS/SVG","原生 JavaScript"],
+        reference:["PhET 思路参考","Tracker 轨迹分析思路","JSXGraph/VPython/OpenModelica 选型边界"],
+        validation:["output_validator.py","人工审核：变量、单位、边界声明"]
+      }
+    };
     const discoveryLaws = [
       {name:"简谐振动", category:"振动、波动与声学", sub:"周期轨迹 → x=Acos(ωt)", formula:"x = A cos(ωt + φ)", legend:["A：振幅","ω：角频率","t：时间","φ：初相位"], insight:"AI 从周期性轨迹中估计周期和角频率，识别回复力与位移成正比。", gen:()=>{const A=1.25,w=1.72;return sample(90,i=>{const t=i/10;return {x:t,y:A*Math.cos(w*t)+noise(.035)}})}, fit:d=>{const period=estimatePeriod(d);const w=2*Math.PI/period;return [["估计周期",period.toFixed(2)+" s"],["估计角频率",w.toFixed(2)+" rad/s"],["发现规律","周期性回复运动"]]}},
       {name:"阻尼运动", category:"振动、波动与声学", sub:"衰减振荡 → e^(-γt)", formula:"x = A e^(-γt) cos(ωt)", legend:["A：初始振幅","γ：阻尼系数","ω：振荡频率","t：时间"], insight:"AI 识别振幅包络随时间指数下降，区分理想振动和能量耗散系统。", gen:()=>sample(100,i=>{const t=i/10;return {x:t,y:1.25*Math.exp(-.16*t)*Math.cos(1.85*t)+noise(.025)}}), fit:d=>[["包络趋势","指数衰减"],["估计阻尼γ","0.16 /s"],["发现规律","能量逐步耗散"]]},
@@ -907,23 +918,47 @@
       bg.addColorStop(.55,"rgba(5,8,22,.02)");
       bg.addColorStop(1,"rgba(76,175,80,.08)");
       ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
-      ctx.fillStyle="#fff";ctx.font="800 22px Microsoft YaHei";ctx.fillText(law.name,28,36);
-      ctx.fillStyle="#00E5FF";ctx.font="700 15px Consolas";ctx.fillText(law.formula,28,62);
-      drawModeHeader(mode, w);
+      drawSkillHeader(law, mode, object, w);
       drawToolPipeline(mode, object, w, h);
-      const sceneBox={x:28,y:92,w:300,h:250};
-      const graphBox={x:352,y:92,w:w-382,h:292};
-      const insightBox={x:28,y:h-126,w:w-56,h:92};
+      const sideGap = 16;
+      const contentX = 28;
+      const contentW = w - 56;
+      const topY = 100;
+      const insightH = h < 500 ? 78 : 92;
+      const mainH = Math.max(220, h - topY - insightH - 24);
+      const sceneW = Math.max(150, Math.min(260, Math.round(contentW * .36)));
+      const graphW = Math.max(220, contentW - sceneW - sideGap);
+      const sceneBox={x:contentX,y:topY,w:sceneW,h:mainH};
+      const graphBox={x:contentX+sceneW+sideGap,y:topY,w:graphW,h:mainH};
+      const insightBox={x:contentX,y:h-insightH-18,w:contentW,h:insightH};
       drawPanelBox(sceneBox.x,sceneBox.y,sceneBox.w,sceneBox.h,"物理对象场景");
       drawScenarioScene(law, mode, sceneBox);
       drawPanelBox(graphBox.x,graphBox.y,graphBox.w,graphBox.h,"变量关系与数据证据");
       const xs=data.map(p=>p.x),ys=data.map(p=>p.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
-      const gx=graphBox.x+38, gy=graphBox.y+graphBox.h-38, gw=graphBox.w-64, gh=graphBox.h-74;
+      const gx=graphBox.x+38, gy=graphBox.y+graphBox.h-38, gw=Math.max(120,graphBox.w-64), gh=Math.max(110,graphBox.h-74);
       const X=x=>gx+(x-minX)/(maxX-minX||1)*gw;
       const Y=y=>gy-(y-minY)/(maxY-minY||1)*gh;
       drawEvidenceGraph(data, metrics, {x:gx,y:gy,w:gw,h:gh,minX,maxX,minY,maxY,X,Y,axis,mode});
-      drawPanelBox(insightBox.x,insightBox.y,insightBox.w,insightBox.h,"从资料库范式到本页实例");
+      drawPanelBox(insightBox.x,insightBox.y,insightBox.w,insightBox.h,physicsAgentBrief.workflow.join(" → "));
       drawInsightStrip(law, mode, metrics, axis, insightBox);
+    }
+    function drawSkillHeader(law, mode, object, w){
+      ctx.fillStyle="#FFFFFF";
+      ctx.font="800 20px Microsoft YaHei";
+      ctx.fillText(law.name,28,34);
+      ctx.fillStyle="#00E5FF";
+      ctx.font="700 14px Consolas";
+      const formula = law.formula.length > 34 ? law.formula.slice(0,33) + "…" : law.formula;
+      ctx.fillText(formula,28,58);
+      const bx = Math.max(250, w - 270);
+      const bw = Math.min(240, w - bx - 24);
+      if(bw > 150){
+        ctx.fillStyle="rgba(0,229,255,.10)";
+        ctx.strokeStyle="rgba(0,229,255,.40)";
+        roundRectPath(bx,18,bw,54,9);ctx.fill();ctx.stroke();
+        ctx.fillStyle="#00E5FF";ctx.font="800 12px Microsoft YaHei";ctx.fillText(mode.name,bx+12,39);
+        ctx.fillStyle="#B0BEC5";ctx.font="500 10px Microsoft YaHei";ctx.fillText(object+" · "+mode.tag,bx+12,58);
+      }
     }
     function drawPanelBox(x,y,w,h,title){
       ctx.fillStyle="rgba(5,8,22,.72)";
@@ -948,7 +983,8 @@
         mode.name.includes("CindyJS") ? ["几何对象","拖动约束","构造关系","公式"] :
         mode.name.includes("JSXGraph") ? ["变量滑块","函数曲线","数据点","参数识别"] :
         ["物理现象","可控变量","反馈动画","规律解释"];
-      const x0=26,y0=70,gap=8,bw=92,bh=18;
+      const x0=26,y0=70,gap=8,bh=18;
+      const bw=Math.max(70, Math.min(92, (w - 58 - gap * (steps.length - 1)) / steps.length));
       steps.forEach((s,i)=>{
         const x=x0+i*(bw+gap);
         ctx.fillStyle=i===steps.length-1?"rgba(255,193,7,.16)":"rgba(255,255,255,.06)";
@@ -1008,6 +1044,12 @@
         const text=String(c[1]);
         ctx.fillText(text.length>18?text.slice(0,17)+"…":text,x+8,y+32);
       });
+      if(box.h > 82){
+        ctx.fillStyle="rgba(176,190,197,.82)";
+        ctx.font="500 10px Microsoft YaHei";
+        const note = physicsAgentBrief.boundary.length > 56 ? physicsAgentBrief.boundary.slice(0,55) + "…" : physicsAgentBrief.boundary;
+        ctx.fillText(note, box.x + 14, box.y + box.h - 10);
+      }
     }
     function drawScenarioScene(law, mode, box){
       const n=law.name,x=box.x+18,y=box.y+36,w=box.w-36,h=box.h-54;
@@ -1469,6 +1511,7 @@
       });
       spans.unshift(`<span class="law-identity"><b>${esc(physicalObjectOf(law))}</b><small>${esc(law.formula)}</small><em>${esc(dynamicRelationText(law, metrics, data))}</em></span>`);
       spans.unshift(`<span class="tool-source"><b>${esc(mode.name)}</b><small>${esc(mode.tag)}</small><em>${esc(mode.note)}</em></span>`);
+      spans.unshift(`<span class="tool-source skill-route"><b>Physics Agent Route</b><small>${esc(physicsAgentBrief.classification)}</small><em>${esc(physicsAgentBrief.workflow.join(" → "))}；${esc(physicsAgentBrief.boundary)}</em></span>`);
       spans.unshift(`<span class="scope"><b>数据窗口</b><small>横轴 ${esc(axis.x)}：${fmt(Math.min(...xs))} ~ ${fmt(Math.max(...xs))}</small><small>纵轴 ${esc(axis.y)}：${fmt(Math.min(...ys))} ~ ${fmt(Math.max(...ys))}</small><em>参数强度 ${labState.yScale.toFixed(2)}x · 横轴尺度 ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`);
       return spans.join("");
     }
@@ -1530,7 +1573,8 @@
         const bi = categoryOrder.indexOf(b.name);
         return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
       });
-    menu.innerHTML = `<div class="law-select-stack"><label><span>规律分类</span><select id="lawCategorySelect" aria-label="选择物理规律分类"></select></label><label><span>具体规律</span><select id="lawSelect" aria-label="选择具体物理规律"></select></label><div class="law-select-current" id="lawSelectCurrent"></div></div>`;
+    const skillWorkflow = physicsAgentBrief.workflow.map((step,i)=>`${i ? "<i>→</i>" : ""}<span>${esc(step)}</span>`).join("");
+    menu.innerHTML = `<div class="lab-skill-strip" aria-label="Physics Agent Tool Selection 工作流">${skillWorkflow}<em>${esc(physicsAgentBrief.boundaryShort)}</em></div><div class="law-select-stack"><label><span>规律分类</span><select id="lawCategorySelect" aria-label="选择物理规律分类"></select></label><label><span>具体规律</span><select id="lawSelect" aria-label="选择具体物理规律"></select></label><div class="law-select-current" id="lawSelectCurrent"></div></div>`;
     categorySelect = $("#lawCategorySelect");
     lawSelect = $("#lawSelect");
     currentLawLabel = $("#lawSelectCurrent");
