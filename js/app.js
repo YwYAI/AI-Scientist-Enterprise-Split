@@ -854,7 +854,7 @@
     function toolModeOf(law){
       const n = law.name, c = law.category || "";
       if(/QED|狄拉克|路径积分|标准模型|希格斯|爱因斯坦|测地线|史瓦西|弗里德曼|Polyakov|AdS|圈量子|热力学基本|拉格朗日|哈密顿|最小作用量|麦克斯韦/.test(n)) return {name:"OpenModelica-style", tag:"方程驱动", note:"控制方程 + 状态变量 + 求解关系"};
-      if(/行星|环绕|开普勒|抛体|向心|单摆|转动|角动量|刚体|洛伦兹|回旋|波速|多普勒|弦振动/.test(n)) return {name:"VPython-style", tag:"空间运动", note:"物理对象 + 轨迹 + 实时变量"};
+      if(/行星|环绕|开普勒|抛体|向心|单摆|转动|角动量|刚体|洛伦兹|回旋|波速|多普勒|弦振动/.test(n)) return {name:"VPython-style", tag:"浏览器3D动画", note:"WebGL对象 + 轨迹 + 可导航实时变量"};
       if(/匀速|加速度|自由落体|数据|扩散|冷却|衰变|光电|布拉格|马吕斯|斯涅尔|康普顿|普朗克|德布罗意/.test(n)) return {name:"Tracker-style", tag:"实验分析", note:"观测点 + 模型曲线 + 残差"};
       if(/欧姆|电阻|电容|RC|变压器|电功率|电场|库仑|安培|法拉第|磁|电势/.test(n)) return {name:"OSP/EJS-style", tag:"可编程模型", note:"参数控件 + 可检查模型结构"};
       if(/热|气体|流体|伯努利|泊肃叶|斯托克斯|毛细|浮力|摩擦|功|能|动量|胡克/.test(n) || c.includes("运动学")) return {name:"PhET-style", tag:"概念探索", note:"可拖动参数 + 因果反馈"};
