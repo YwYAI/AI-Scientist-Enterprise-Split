@@ -124,9 +124,12 @@ https://ywyai.github.io/AI-Scientist-Enterprise-Split/
 | GlowScript / Web VPython | https://github.com/vpython/glowscript | Web 版 VPython，用 WebGL 生成可导航实时 3D 动画 |
 | VPython 组织页 | https://github.com/vpython | VPython 相关项目集合 |
 | VPython 官网 | https://vpython.org/ | 三维物理对象、运动轨迹、实时变量可视化 |
-| OpenModelica | https://openmodelica.org/ | 方程驱动、多物理系统、状态变量与求解器语义 |
+| OpenModelica 组织页 | https://github.com/OpenModelica | 工程级多物理系统建模仿真生态 |
+| OpenModelica 主仓库 | https://github.com/OpenModelica/OpenModelica | Modelica 建模与仿真环境，适合热、流、电、机、控制系统耦合建模 |
+| OMPython | https://github.com/OpenModelica/OMPython | Python 调用 OpenModelica 的接口，适合脚本化建模、编译、仿真与参数实验 |
+| OpenModelica 官网 | https://openmodelica.org/ | 方程驱动、多物理系统、状态变量与求解器语义 |
 
-因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`CircuitJS-style`、`JSXGraph-style`、`CindyJS-style`、`VPython-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。其中 `CircuitJS-style` 主要借鉴 Falstad / CircuitJS1 的浏览器电路仿真表达，强调元件拓扑、电压颜色和电流流动；`JSXGraph-style` 主要借鉴交互函数图表、变量滑块和数据可视化；`CindyJS-style` 主要借鉴动态几何构造和可拖动约束关系；`VPython-style` 主要借鉴 GlowScript / Web VPython 的浏览器 3D、WebGL、可导航实时动画表达。
+因此，附录中的 `PhET-style`、`Tracker-style`、`OSP/EJS-style`、`CircuitJS-style`、`JSXGraph-style`、`CindyJS-style`、`VPython-style`、`OpenModelica-style` 表示“图例表达范式”，不是软件依赖声明。其中 `CircuitJS-style` 主要借鉴 Falstad / CircuitJS1 的浏览器电路仿真表达，强调元件拓扑、电压颜色和电流流动；`JSXGraph-style` 主要借鉴交互函数图表、变量滑块和数据可视化；`CindyJS-style` 主要借鉴动态几何构造和可拖动约束关系；`VPython-style` 主要借鉴 GlowScript / Web VPython 的浏览器 3D、WebGL、可导航实时动画表达；`OpenModelica-style` 主要借鉴工程级多物理系统建模，强调 DAE/ODE 求解、状态变量和热-流-电-机-控制系统耦合。
 
 ## 本地运行
 

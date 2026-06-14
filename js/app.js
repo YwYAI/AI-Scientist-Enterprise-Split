@@ -853,7 +853,7 @@
     }
     function toolModeOf(law){
       const n = law.name, c = law.category || "";
-      if(/QED|狄拉克|路径积分|标准模型|希格斯|爱因斯坦|测地线|史瓦西|弗里德曼|Polyakov|AdS|圈量子|热力学基本|拉格朗日|哈密顿|最小作用量|麦克斯韦/.test(n)) return {name:"OpenModelica-style", tag:"方程驱动", note:"控制方程 + 状态变量 + 求解关系"};
+      if(/QED|狄拉克|路径积分|标准模型|希格斯|爱因斯坦|测地线|史瓦西|弗里德曼|Polyakov|AdS|圈量子|热力学基本|拉格朗日|哈密顿|最小作用量|麦克斯韦/.test(n)) return {name:"OpenModelica-style", tag:"多物理方程系统", note:"DAE/ODE求解 + 状态变量 + 工程耦合"};
       if(/斯涅尔|马吕斯|透镜|光栅|干涉|布拉格|康普顿|抛体|平抛|几何/.test(n)) return {name:"CindyJS-style", tag:"交互几何", note:"几何构造 + 可拖动点 + 约束关系"};
       if(/匀速|加速度|匀变速|速度位移|自由落体|扩散|冷却|衰变|光电|普朗克|德布罗意|热传导|理想气体|线膨胀|动能|势能|功率|反平方/.test(n)) return {name:"JSXGraph-style", tag:"函数图表", note:"变量滑块 + 函数曲线 + 数据可视化"};
       if(/行星|环绕|开普勒|抛体|向心|单摆|转动|角动量|刚体|洛伦兹|回旋|波速|多普勒|弦振动/.test(n)) return {name:"VPython-style", tag:"浏览器3D动画", note:"WebGL对象 + 轨迹 + 可导航实时变量"};
