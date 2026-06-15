@@ -1495,24 +1495,24 @@
       const yRange = Math.abs(Math.max(...ys) - Math.min(...ys));
       const trend = Math.abs(slope) < Math.max(.01, yRange * .015) ? "保持近似约束或周期结构" : (slope > 0 ? `随 ${axis.x} 增大而增大` : `随 ${axis.x} 增大而减小`);
       const keyMetric = metrics.find(([key]) => /估计|斜率|系数|周期|半衰期|比值|曲率|耦合/.test(key)) || metrics[0];
-      const metricPart = keyMetric ? `；${keyMetric[0]} = ${keyMetric[1]}` : "";
-      const condition = `参数强度 ${labState.yScale.toFixed(2)}x，横轴尺度 ${labState.xScale.toFixed(2)}x，噪声 ${labState.noise.toFixed(3)}`;
-      return `当前图中，${axis.y}${trend}${metricPart}；条件：${condition}。函数曲线仅用于证明变量关系。`;
+      const metricPart = keyMetric ? `；${keyMetric[0]} ${keyMetric[1]}` : "";
+      return `${axis.y}${trend}${metricPart}；曲线用于验证变量关系。`;
     }
     function dynamicLegendHTML(law, metrics, data){
       const axis = axisInfoOf(law);
       const mode = toolModeOf(law);
       const xs = data.map(p => p.x), ys = data.map(p => p.y);
       const metricText = metrics.map(([key, value]) => `${key} ${value}`);
-      const spans = legendMeta(law).map(({symbol, desc}) => {
+      const variables = legendMeta(law).map(({symbol, desc}) => {
         const hit = metricText.find(text => text.includes(symbol) || text.includes(desc.slice(0, 2)));
-        const estimate = hit ? `<em>本轮估计：${esc(hit)}</em>` : "";
-        return `<span><b>${esc(symbol)}</b><small>${esc(desc)}</small>${estimate}</span>`;
-      });
-      spans.unshift(`<span class="law-identity"><b>${esc(physicalObjectOf(law))}</b><small>${esc(law.formula)}</small><em>${esc(dynamicRelationText(law, metrics, data))}</em></span>`);
-      spans.unshift(`<span class="tool-source"><b>${esc(mode.name)}</b><small>${esc(mode.tag)}</small><em>${esc(mode.note)}</em></span>`);
-      spans.unshift(`<span class="tool-source skill-route"><b>Physics Agent Route</b><small>${esc(physicsAgentBrief.classification)}</small><em>${esc(physicsAgentBrief.workflow.join(" → "))}；${esc(physicsAgentBrief.boundary)}</em></span>`);
-      spans.unshift(`<span class="scope"><b>数据窗口</b><small>横轴 ${esc(axis.x)}：${fmt(Math.min(...xs))} ~ ${fmt(Math.max(...xs))}</small><small>纵轴 ${esc(axis.y)}：${fmt(Math.min(...ys))} ~ ${fmt(Math.max(...ys))}</small><em>参数强度 ${labState.yScale.toFixed(2)}x · 横轴尺度 ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`);
+        return `<i><b>${esc(symbol)}</b>${esc(desc)}${hit ? `<em>${esc(hit)}</em>` : ""}</i>`;
+      }).join("");
+      const spans = [
+        `<span class="scope"><b>数据窗口</b><small>X ${esc(axis.x)}：${fmt(Math.min(...xs))}~${fmt(Math.max(...xs))}</small><small>Y ${esc(axis.y)}：${fmt(Math.min(...ys))}~${fmt(Math.max(...ys))}</small><em>${labState.yScale.toFixed(2)}x · ${labState.xScale.toFixed(2)}x · 噪声 ${labState.noise.toFixed(3)}</em></span>`,
+        `<span class="tool-source skill-route"><b>Agent Route</b><small>${esc(physicsAgentBrief.classification)}</small><em>normalize → route → brief → validate</em></span>`,
+        `<span class="law-identity"><b>${esc(physicalObjectOf(law))}</b><small>${esc(law.formula)}</small><em>${esc(dynamicRelationText(law, metrics, data))}</em></span>`,
+        `<span class="variable-pack"><b>变量解释</b><small>${variables}</small></span>`
+      ];
       return spans.join("");
     }
     let categorySelect = null;

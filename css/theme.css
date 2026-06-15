@@ -1687,15 +1687,15 @@ svg{max-width:100%;height:auto}
 .physics-lab-chapter{
   height:100vh;
   min-height:100vh;
-  padding:46px 36px 34px;
+  padding:38px 36px 28px;
   display:grid;
   grid-template-rows:auto auto minmax(0,1fr);
-  gap:12px;
+  gap:10px;
   overflow:hidden;
 }
 .physics-lab-chapter h2{
   margin:0;
-  font-size:clamp(30px,2.45vw,44px);
+  font-size:clamp(28px,2.25vw,40px);
   line-height:1.08;
 }
 .physics-lab-chapter .skill-visual-audit{
@@ -1705,7 +1705,7 @@ svg{max-width:100%;height:auto}
 }
 .physics-lab-chapter .logic-strip{
   margin:0;
-  padding:10px 12px;
+  padding:8px 12px;
   gap:10px;
 }
 .physics-lab-chapter .logic-strip span,
@@ -1714,9 +1714,9 @@ svg{max-width:100%;height:auto}
 .physics-lab-chapter .physics-lab-grid{
   min-height:0;
   height:100%;
-  grid-template-columns:minmax(520px,1fr) minmax(300px,340px);
+  grid-template-columns:minmax(620px,1fr) minmax(315px,340px);
   grid-template-rows:auto minmax(0,1fr);
-  gap:12px;
+  gap:10px;
 }
 .physics-lab-grid>.panel{min-height:0}
 .law-menu{display:grid;grid-template-columns:1fr;gap:12px;align-content:start;padding:14px;max-height:520px;overflow:auto}
@@ -1724,8 +1724,8 @@ svg{max-width:100%;height:auto}
   grid-column:1 / -1;
   height:auto;
   max-height:none;
-  gap:7px;
-  padding:10px 12px;
+  gap:6px;
+  padding:8px 12px;
   overflow:visible;
   align-content:start;
   align-self:start;
@@ -1734,8 +1734,8 @@ svg{max-width:100%;height:auto}
   display:flex;
   align-items:center;
   gap:7px;
-  min-height:22px;
-  padding:0 2px 4px;
+  min-height:18px;
+  padding:0 2px 2px;
   color:rgba(176,190,197,.72);
   font-size:10px;
   font-weight:900;
@@ -1763,7 +1763,7 @@ svg{max-width:100%;height:auto}
 .law-select-stack{
   display:grid;
   grid-template-columns:minmax(190px,260px) minmax(360px,1fr) minmax(240px,340px);
-  gap:12px;
+  gap:10px;
   width:100%;
   align-items:end;
   text-rendering:geometricPrecision;
@@ -1771,7 +1771,7 @@ svg{max-width:100%;height:auto}
 }
 .law-select-stack label{
   display:grid;
-  gap:6px;
+  gap:4px;
   color:var(--muted);
   font-size:12px;
   font-weight:900;
@@ -1789,7 +1789,7 @@ svg{max-width:100%;height:auto}
   border-radius:8px;
   background:#071126;
   color:#fff;
-  padding:10px 11px;
+  padding:8px 10px;
   font:700 13px "Microsoft YaHei",Arial,sans-serif;
   letter-spacing:0;
   text-shadow:none;
@@ -1801,9 +1801,9 @@ svg{max-width:100%;height:auto}
 }
 .law-select-current{
   display:grid;
-  gap:5px;
-  min-height:48px;
-  padding:10px;
+  gap:3px;
+  min-height:43px;
+  padding:8px 10px;
   border:1px solid rgba(255,193,7,.25);
   border-radius:8px;
   background:rgba(255,193,7,.07);
@@ -1853,31 +1853,130 @@ svg{max-width:100%;height:auto}
 #lawCanvas{width:100%;height:100%;min-height:430px;border:1px solid rgba(255,255,255,.10);border-radius:8px;background:#071126}
 .physics-lab-chapter #lawCanvas{min-height:0;height:100%;display:block;image-rendering:auto}
 .law-result{display:flex;flex-direction:column}
-.physics-lab-chapter .law-result{grid-column:2;grid-row:2;overflow:auto;padding:12px}
+.physics-lab-chapter .law-result{grid-column:2;grid-row:2;overflow:hidden;padding:10px;min-height:0}
 .law-result .formula{margin-top:10px}
-.physics-lab-chapter .law-result .kicker{font-size:11px;margin-bottom:8px}
-.physics-lab-chapter .law-result h3{font-size:20px;margin-bottom:8px}
-.physics-lab-chapter .law-result .formula{font-size:20px;padding:10px;margin-top:6px;line-height:1.2}
-.physics-lab-chapter .formula-legend.dynamic{gap:6px;margin-top:8px}
-.physics-lab-chapter .formula-legend.dynamic span{
-  grid-template-columns:minmax(46px,.36fr) 1fr;
-  gap:2px 8px;
-  padding:6px 8px;
+.physics-lab-chapter .law-result .kicker{font-size:10px;margin-bottom:5px}
+.physics-lab-chapter .law-result h3{font-size:19px;margin-bottom:5px;line-height:1.12}
+.physics-lab-chapter .law-result .formula{font-size:19px;padding:8px;margin-top:5px;line-height:1.15}
+.physics-lab-chapter .formula-legend.dynamic{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px;
+  margin-top:5px;
 }
-.physics-lab-chapter .formula-legend.dynamic b{font-size:12px}
-.physics-lab-chapter .formula-legend.dynamic small{font-size:11px;line-height:1.25}
-.physics-lab-chapter .formula-legend.dynamic em{font-size:11px;line-height:1.3}
+.physics-lab-chapter .formula-legend.dynamic span{
+  display:block;
+  padding:4px 6px;
+  min-width:0;
+}
+.physics-lab-chapter .formula-legend.dynamic b{
+  display:block;
+  font-size:10.5px;
+  line-height:1.1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.physics-lab-chapter .formula-legend.dynamic small{
+  display:block;
+  font-size:9.4px;
+  line-height:1.12;
+}
+.physics-lab-chapter .formula-legend.dynamic em{
+  display:block;
+  font-size:9.2px;
+  line-height:1.12;
+}
 .physics-lab-chapter .formula-legend.dynamic .skill-route{
   border-color:rgba(255,193,7,.28);
   background:rgba(255,193,7,.07);
 }
 .physics-lab-chapter .formula-legend.dynamic .skill-route b{color:var(--amber)}
-.physics-lab-chapter .law-controls{gap:6px;margin:8px 0;padding:8px}
-.physics-lab-chapter .law-controls label{grid-template-columns:62px 1fr 46px;gap:8px;font-size:11px}
+.physics-lab-chapter .formula-legend.dynamic .law-identity,
+.physics-lab-chapter .formula-legend.dynamic .scope,
+.physics-lab-chapter .formula-legend.dynamic .skill-route,
+.physics-lab-chapter .formula-legend.dynamic .variable-pack{
+  grid-column:1 / -1;
+}
+.physics-lab-chapter .formula-legend.dynamic .scope,
+.physics-lab-chapter .formula-legend.dynamic .skill-route{
+  display:grid;
+  grid-template-columns:58px 1fr;
+  gap:2px 8px;
+}
+.physics-lab-chapter .formula-legend.dynamic .scope small,
+.physics-lab-chapter .formula-legend.dynamic .skill-route small,
+.physics-lab-chapter .formula-legend.dynamic .scope em,
+.physics-lab-chapter .formula-legend.dynamic .skill-route em{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.physics-lab-chapter .formula-legend.dynamic .scope em,
+.physics-lab-chapter .formula-legend.dynamic .skill-route em{
+  grid-column:2;
+}
+.physics-lab-chapter .formula-legend.dynamic .law-identity{
+  display:grid;
+  grid-template-columns:58px 1fr;
+  gap:2px 8px;
+}
+.physics-lab-chapter .formula-legend.dynamic .law-identity small,
+.physics-lab-chapter .formula-legend.dynamic .law-identity em{
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.physics-lab-chapter .formula-legend.dynamic .variable-pack{
+  display:grid;
+  grid-template-columns:50px 1fr;
+  gap:4px;
+}
+.physics-lab-chapter .formula-legend.dynamic .variable-pack small{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:2px 6px;
+}
+.physics-lab-chapter .formula-legend.dynamic .variable-pack i{
+  display:block;
+  color:var(--muted);
+  font-style:normal;
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  line-height:1.12;
+}
+.physics-lab-chapter .formula-legend.dynamic .variable-pack i b{
+  color:var(--cyan);
+  margin-right:4px;
+}
+.physics-lab-chapter .formula-legend.dynamic .variable-pack i em{
+  display:none;
+}
+.physics-lab-chapter .law-controls{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  margin:5px 0;
+  padding:6px;
+}
+.physics-lab-chapter .law-controls label{
+  grid-template-columns:1fr;
+  gap:2px;
+  font-size:9px;
+  line-height:1.1;
+}
+.physics-lab-chapter .law-controls input{height:12px}
+.physics-lab-chapter .law-controls b{font-size:10px;text-align:left}
 .law-result .lead{font-size:18px;line-height:1.55;margin-top:14px}
-.physics-lab-chapter .law-result .lead{font-size:13px;line-height:1.35;margin-top:8px}
+.physics-lab-chapter .law-result .lead{font-size:12px;line-height:1.26;margin-top:5px}
 .law-metrics{display:grid;gap:9px;margin:16px 0 18px}
-.physics-lab-chapter .law-metrics{gap:6px;margin:8px 0 10px}
+.physics-lab-chapter .law-metrics{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  margin:5px 0 6px;
+}
 .law-metrics div{
   display:grid;
   grid-template-columns:1fr auto;
@@ -1891,8 +1990,20 @@ svg{max-width:100%;height:auto}
   background:rgba(0,229,255,.05);
 }
 .law-metrics b{color:var(--cyan)}
-.physics-lab-chapter .law-metrics div{padding:6px 8px;font-size:11px}
-.physics-lab-chapter .button{padding:9px 12px;font-size:12px}
+.physics-lab-chapter .law-metrics div{
+  display:block;
+  padding:5px 6px;
+  font-size:9.5px;
+  min-width:0;
+}
+.physics-lab-chapter .law-metrics span,
+.physics-lab-chapter .law-metrics b{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.physics-lab-chapter .button{padding:8px 12px;font-size:11px;margin-top:auto}
 .summary-wrap{max-width:1280px}
 .summary-line{font-size:clamp(32px,3.2vw,64px);font-weight:900;margin:18px 0;opacity:0;transform:translateY(18px)}
 .summary-lock{
